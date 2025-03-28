@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using HospitalApp.Data;
 using HospitalApp.Models;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
