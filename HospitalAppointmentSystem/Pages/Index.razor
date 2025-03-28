@@ -1,16 +1,42 @@
-@namespace HospitalApp.Pages
-@using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Authorization
+@page "/adduser"
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using HospitalApp.Models 
+@using Microsoft.AspNetCore.Components.Forms
 
-<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly">
-        <Found Context="routeData">
-            <RouteView RouteData="@routeData" />
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-        </Found>
-        <NotFound>
-            <h1>Page not found</h1>
-            <p>Sorry, but the page you requested could not be found.</p>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
+<h3>Add a New User</h3>
+
+<EditForm Model="@newUser" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="name">Name:</label>
+        <InputText id="name" @bind-Value="newUser.Name" />
+    </div>
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="newUser.Email" />
+    </div>
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private User newUser = new User();
+
+    private async Task HandleValidSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("api/users", newUser);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/"); 
+        }
+        else
+        {
+          
+        }
+    }
+}
