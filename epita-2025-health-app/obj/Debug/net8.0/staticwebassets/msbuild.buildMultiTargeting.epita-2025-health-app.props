@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/epita-2025-health-app.props" />
-</Project>
