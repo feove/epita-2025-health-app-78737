@@ -1,11 +1,8 @@
 @page "/login"
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
-
 @inject NavigationManager Navigation
-@inject HttpClient Http
-@using HospitalApp.Models
-
+@inject IHttpClientFactory HttpClientFactory
 
 <h3>Login</h3>
 
@@ -15,31 +12,49 @@
 
     <div>
         <label for="email">Email:</label>
-        <InputText id="email" @bind-value="loginUser.Email" />
+        <InputText id="email" @bind-Value="loginUser.Email" />
     </div>
 
     <div>
         <label for="password">Password:</label>
-        <InputText id="password" @bind-value="loginUser.PasswordHash" type="password" />
+        <InputText id="password" @bind-Value="loginUser.PasswordHash" type="password" />
     </div>
 
     <button type="submit">Login</button>
+    <p>@errorMessage</p>
 </EditForm>
 
 @code {
     private User loginUser = new User();
+    private string errorMessage = string.Empty;  // Fix for nullable warning
 
     private async Task HandleLogin()
     {
-        var response = await Http.PostAsJsonAsync("api/users/login", loginUser);
+        try
+        {
+            var client = HttpClientFactory.CreateClient("API");
+            var response = await client.PostAsJsonAsync("api/users/login", loginUser);
 
-        if (response.IsSuccessStatusCode)
-        {
-            Navigation.NavigateTo("/");
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                errorMessage = "Login failed: " + await response.Content.ReadAsStringAsync();
+                Console.WriteLine(errorMessage);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Login failed.");
+            errorMessage = "An error occurred: " + ex.Message;
+            Console.WriteLine(errorMessage);
         }
+    }
+
+    public class User
+    {
+        public string Email { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
     }
 }

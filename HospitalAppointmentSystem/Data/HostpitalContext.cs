@@ -5,8 +5,11 @@ namespace HospitalApp.Data
 {
     public class HospitalContext : DbContext
     {
-        public HospitalContext(DbContextOptions<HospitalContext> options) : base(options) {}
+        public HospitalContext(DbContextOptions<HospitalContext> options)
+            : base(options)
+        {
+        }
 
-        public DbSet<User> Users { get; set; }  // DbSet for the User model
+        public DbSet<User> Users { get; set; }
     }
 }
