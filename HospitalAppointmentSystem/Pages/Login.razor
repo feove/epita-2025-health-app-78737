@@ -1,0 +1,45 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using HospitalApp.Models
+
+
+<h3>Login</h3>
+
+<EditForm Model="@loginUser" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-value="loginUser.Email" />
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" @bind-value="loginUser.PasswordHash" type="password" />
+    </div>
+
+    <button type="submit">Login</button>
+</EditForm>
+
+@code {
+    private User loginUser = new User();
+
+    private async Task HandleLogin()
+    {
+        var response = await Http.PostAsJsonAsync("api/users/login", loginUser);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            Console.WriteLine("Login failed.");
+        }
+    }
+}

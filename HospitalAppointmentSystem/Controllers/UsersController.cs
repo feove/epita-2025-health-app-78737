@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using HospitalApp.Data;
 using HospitalApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalApp.Controllers
 {
@@ -15,18 +16,23 @@ namespace HospitalApp.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] User user)
-        {
-            if (user == null)
-            {
-                return BadRequest("User data is invalid.");
-            }
+       [HttpPost("login")]
+public async Task<IActionResult> Login([FromBody] User loginUser)
+{
+    if (loginUser == null || string.IsNullOrEmpty(loginUser.Email) || string.IsNullOrEmpty(loginUser.PasswordHash))
+    {
+        return BadRequest("Invalid login data.");
+    }
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+    var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginUser.Email);
 
-            return CreatedAtAction(nameof(CreateUser), new { id = user.Id }, user);
-        }
+    if (user == null || user.PasswordHash != loginUser.PasswordHash)
+    {
+        return Unauthorized("Invalid email or password.");
+    }
+
+    return Ok("Login successful!");
+}
+
     }
 }
