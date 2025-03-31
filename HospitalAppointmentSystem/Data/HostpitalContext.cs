@@ -7,9 +7,9 @@ namespace HospitalApp.Data
     {
         public HospitalContext(DbContextOptions<HospitalContext> options)
             : base(options)
-        {
-        }
+        { }
 
         public DbSet<User> Users { get; set; }
+        // Add other DbSets for your models like Doctors, Appointments, etc.
     }
 }

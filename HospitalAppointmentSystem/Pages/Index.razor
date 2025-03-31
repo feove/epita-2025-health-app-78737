@@ -12,12 +12,12 @@
 
     <div>
         <label for="name">Name:</label>
-        <InputText id="name" @bind-Value="newUser.Name" />
+        <InputText id="name" @bind-value="newUser.Name" />
     </div>
 
     <div>
         <label for="email">Email:</label>
-        <InputText id="email" @bind-Value="newUser.Email" />
+        <InputText id="email" @bind-value="newUser.Email" />
     </div>
 
     <button type="submit">Submit</button>
@@ -28,15 +28,16 @@
 
     private async Task HandleValidSubmit()
     {
-        var response = await Http.PostAsJsonAsync("api/users", newUser);
+        var response = await Http.PostAsJsonAsync("api/users/register", newUser);
 
         if (response.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/"); 
+            Navigation.NavigateTo("/");
         }
         else
         {
-          
+            // Handle error (e.g., show a message to the user)
         }
     }
 }
+

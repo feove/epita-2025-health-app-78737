@@ -1,60 +1,53 @@
 @page "/login"
+@using HospitalApp.Models
 @using Microsoft.AspNetCore.Components.Forms
-@using System.ComponentModel.DataAnnotations
 @inject NavigationManager Navigation
-@inject IHttpClientFactory HttpClientFactory
+@inject HttpClient Http
 
 <h3>Login</h3>
 
-<EditForm Model="@loginUser" OnValidSubmit="HandleLogin">
+<EditForm Model="@loginUser" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div>
-        <label for="email">Email:</label>
-        <InputText id="email" @bind-Value="loginUser.Email" />
+        <label>Email:</label>
+        <InputText @bind-Value="loginUser.Email" />
     </div>
-
     <div>
-        <label for="password">Password:</label>
-        <InputText id="password" @bind-Value="loginUser.PasswordHash" type="password" />
+        <label>Password:</label>
+        <InputText @bind-Value="loginUser.PasswordHash" type="password" />
     </div>
 
     <button type="submit">Login</button>
-    <p>@errorMessage</p>
 </EditForm>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color:red;">An error occurred: @errorMessage</p>
+}
 
 @code {
     private User loginUser = new User();
-    private string errorMessage = string.Empty;  // Fix for nullable warning
+    private string errorMessage = string.Empty;
 
-    private async Task HandleLogin()
+    private async Task HandleValidSubmit()
     {
         try
         {
-            var client = HttpClientFactory.CreateClient("API");
-            var response = await client.PostAsJsonAsync("api/users/login", loginUser);
-
+            var response = await Http.PostAsJsonAsync("api/users/login", loginUser);
             if (response.IsSuccessStatusCode)
             {
                 Navigation.NavigateTo("/");
             }
             else
             {
-                errorMessage = "Login failed: " + await response.Content.ReadAsStringAsync();
-                Console.WriteLine(errorMessage);
+                errorMessage = "Login failed.";
             }
         }
         catch (Exception ex)
         {
-            errorMessage = "An error occurred: " + ex.Message;
-            Console.WriteLine(errorMessage);
+            errorMessage = $"Error: {ex.Message}";
         }
-    }
-
-    public class User
-    {
-        public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
     }
 }
