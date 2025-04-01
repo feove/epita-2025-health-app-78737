@@ -4927,11 +4927,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ibore\\website\\epita-2025-health-app-78737\\BlazorHealthApp2025\\BlazorHealthApp2025.csproj",
+      "projectUniqueName": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\BlazorHealthApp2025.csproj",
       "projectName": "BlazorHealthApp2025",
-      "projectPath": "C:\\Users\\ibore\\website\\epita-2025-health-app-78737\\BlazorHealthApp2025\\BlazorHealthApp2025.csproj",
+      "projectPath": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\BlazorHealthApp2025.csproj",
       "packagesPath": "C:\\Users\\ibore\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ibore\\website\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\",
+      "outputPath": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ibore\\AppData\\Roaming\\NuGet\\NuGet.Config"
