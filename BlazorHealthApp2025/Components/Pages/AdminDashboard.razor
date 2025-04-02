@@ -8,6 +8,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject AdminService AdminService
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Admin Dashboard</PageTitle>
 
@@ -34,22 +35,23 @@
                     <td>
                         @if (editingUserId == user.Id)
                         {
-                            <div onclick="document.querySelector('.navbar-toggler').click()>
-                               @foreach (var role in allRoles)
+                            <div>
+                            <select @onchange="(e) => SelectRole(e)" class="form-select">
+                                @foreach (var role in allRoles)
                                 {
-                                    <label>
-                                        <input type="radio" name="role_@user.Id" value="@role" @onchange="(e) => SelectRole(e, role)" checked="@(selectedRole == role)" />
-                                        @role
-                                    </label>
+                                    <option value="@role" selected="@(selectedRole == role)">@role</option>
                                 }
+                            </select>
 
-                                <button class="btn btn-success" @onclick="async () => await SaveUserRole(user)">OK</button>
-                                <button class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
-                            </div>
+                            <button class="btn btn-success" @onclick="async () => await SaveUserRole(user)">OK</button>
+                            <button class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
+                        </div>
+
                         }
                         else
                         {
-                            <button class="btn btn-warning" @onclick="() => StartEdit(user.Id)">Change Role</button>
+                          <button class="btn btn-warning" @onclick="@(() => StartEdit(user.Id))">Change Role</button>
+
                         }
                     </td>
                 </tr>
@@ -85,24 +87,33 @@ else
         StateHasChanged();
     }
 
-    private void StartEdit(string userId)
+    private void SelectRole(ChangeEventArgs e)
+    {
+        selectedRole = e.Value?.ToString() ?? "Patient";
+        StateHasChanged();
+    }
+
+   private void StartEdit(string userId)
     {
         editingUserId = userId;
         selectedRole = userRoleMap.ContainsKey(userId) ? userRoleMap[userId] : "Patient";
-        StateHasChanged();
+        StateHasChanged();  // Force UI update
     }
+
 
     private void CancelEdit()
     {
         editingUserId = null;
-        selectedRole = "Patient";
+        selectedRole = "Doctor";
         StateHasChanged();
     }
 
     private void SelectRole(ChangeEventArgs e, string role)
     {
         selectedRole = role;
+        StateHasChanged();  // Update the state after role selection
     }
+
 
     private async Task SaveUserRole(ApplicationUser user)
     {
@@ -113,16 +124,18 @@ else
         }
 
         var currentRoles = await UserManager.GetRolesAsync(user);
-        var currentRole = currentRoles.FirstOrDefault() ?? "No Role";
 
-        if (currentRole != "No Role")
+        // Remove all current roles
+        foreach (var role in currentRoles)
         {
-            await AdminService.RemoveRoleFromUser(user, currentRole);
+            await UserManager.RemoveFromRoleAsync(user, role);
         }
 
-        await AdminService.AddRoleToUser(user, selectedRole);
+        // Add the selected role
+        await UserManager.AddToRoleAsync(user, selectedRole);
         userRoleMap[user.Id] = selectedRole;
         editingUserId = null;
         await LoadUsersAndRolesAsync();
     }
+
 }
