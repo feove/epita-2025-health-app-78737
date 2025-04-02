@@ -1,5 +1,5 @@
 @page "/appointments"
-@attribute [Authorize] 
+@attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using BlazorHealthApp2025.Data
 @inject NavigationManager NavigationManager
@@ -14,45 +14,53 @@
 
 <h3>Book an Appointment</h3>
 
-<EditForm Model="appointment" OnValidSubmit="SubmitAppointment">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="form-floating mb-3">
-        <InputDate @bind-Value="appointment.AppointmentDate" class="form-control" />
-        <label>Appointment Date</label>
-    </div>
-
-    <div class="form-floating mb-3">
-        <InputTextArea @bind-Value="appointment.Description" class="form-control" placeholder="Appointment Description" />
-        <label>Description</label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Book Appointment</button>
-</EditForm>
-
-<hr />
-
-<h4>Your Appointments</h4>
-@if (appointments?.Any() == true)
+@if (isPatient)
 {
-    <ul class="list-group">
-        @foreach (var appt in appointments)
-        {
-            <li class="list-group-item">
-                <strong>@appt.AppointmentDate.ToString("f"):</strong> @appt.Description
-            </li>
-        }
-    </ul>
+    <EditForm Model="appointment" OnValidSubmit="SubmitAppointment">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-floating mb-3">
+            <InputDate @bind-Value="appointment.AppointmentDate" class="form-control" />
+            <label>Appointment Date</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <InputTextArea @bind-Value="appointment.Description" class="form-control" placeholder="Appointment Description" />
+            <label>Description</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+    </EditForm>
+
+    <hr />
+
+    <h4>Your Appointments</h4>
+    @if (appointments?.Any() == true)
+    {
+        <ul class="list-group">
+            @foreach (var appt in appointments)
+            {
+                <li class="list-group-item">
+                    <strong>@appt.AppointmentDate.ToString("f"):</strong> @appt.Description
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No appointments booked yet.</p>
+    }
 }
 else
 {
-    <p>No appointments booked yet.</p>
+    <p>You do not have access to book an appointment. Please contact support.</p>
 }
 
 @code {
     private Appointment appointment = new();
     private List<Appointment> appointments = new();
+    private bool isPatient = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,10 +69,18 @@ else
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            var patientId = user.FindFirst(c => c.Type == "sub")?.Value;
-            appointments = await DbContext.Appointments
-                .Where(a => a.PatientId == patientId)
-                .ToListAsync();
+            var userId = user.FindFirst(c => c.Type == "sub")?.Value;
+
+            // Check if the user has the "Patient" role
+            isPatient = await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(user), "Patient");
+
+            if (isPatient)
+            {
+                // Fetch appointments if the user is a patient
+                appointments = await DbContext.Appointments
+                    .Where(a => a.PatientId == userId)
+                    .ToListAsync();
+            }
         }
     }
 
@@ -73,7 +89,7 @@ else
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        if (user.Identity is not null && user.Identity.IsAuthenticated && isPatient)
         {
             appointment.PatientId = user.FindFirst(c => c.Type == "sub")?.Value ?? "";
             DbContext.Appointments.Add(appointment);
