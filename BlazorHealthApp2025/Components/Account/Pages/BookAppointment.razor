@@ -1,0 +1,86 @@
+@page "/appointments"
+@attribute [Authorize] 
+@using Microsoft.AspNetCore.Authorization
+@using BlazorHealthApp2025.Data
+@inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Book Appointment</PageTitle>
+
+<h3>Book an Appointment</h3>
+
+<EditForm Model="appointment" OnValidSubmit="SubmitAppointment">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-floating mb-3">
+        <InputDate @bind-Value="appointment.AppointmentDate" class="form-control" />
+        <label>Appointment Date</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <InputTextArea @bind-Value="appointment.Description" class="form-control" placeholder="Appointment Description" />
+        <label>Description</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Book Appointment</button>
+</EditForm>
+
+<hr />
+
+<h4>Your Appointments</h4>
+@if (appointments?.Any() == true)
+{
+    <ul class="list-group">
+        @foreach (var appt in appointments)
+        {
+            <li class="list-group-item">
+                <strong>@appt.AppointmentDate.ToString("f"):</strong> @appt.Description
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No appointments booked yet.</p>
+}
+
+@code {
+    private Appointment appointment = new();
+    private List<Appointment> appointments = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var patientId = user.FindFirst(c => c.Type == "sub")?.Value;
+            appointments = await DbContext.Appointments
+                .Where(a => a.PatientId == patientId)
+                .ToListAsync();
+        }
+    }
+
+    private async Task SubmitAppointment()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            appointment.PatientId = user.FindFirst(c => c.Type == "sub")?.Value ?? "";
+            DbContext.Appointments.Add(appointment);
+            await DbContext.SaveChangesAsync();
+            appointments.Add(appointment);
+
+            appointment = new Appointment();  // Reset the form
+        }
+    }
+}

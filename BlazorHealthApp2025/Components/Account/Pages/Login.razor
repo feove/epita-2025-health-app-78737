@@ -9,6 +9,7 @@
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Log in</PageTitle>
 
@@ -87,13 +88,15 @@
 
     public async Task LoginUser()
     {
-        // This doesn't count login failures towards account lockout
-        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+
+            // Force state update
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            RedirectManager.RedirectTo(ReturnUrl ?? "/appointments");
         }
         else if (result.RequiresTwoFactor)
         {
@@ -111,6 +114,7 @@
             errorMessage = "Error: Invalid login attempt.";
         }
     }
+
 
     private sealed class InputModel
     {

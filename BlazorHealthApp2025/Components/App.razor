@@ -1,5 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<!DOCTYPE html>
 <html lang="en">
+
+
 
 <head>
     <meta charset="utf-8" />
@@ -14,8 +20,24 @@
 </head>
 
 <body>
-    <Routes />
+    <CascadingAuthenticationState>
+        <Routes />
+        @if (isAuthenticated)
+        {
+            <NavLink class="nav-link" href="/appointments">Book Appointment</NavLink>
+        }
+    </CascadingAuthenticationState>
     <script src="_framework/blazor.web.js"></script>
 </body>
 
 </html>
+
+@code {
+    private bool isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+    }
+}
