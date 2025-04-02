@@ -85,7 +85,6 @@
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
     }
-
     public async Task LoginUser()
     {
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -95,8 +94,21 @@
 
             // Force state update
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = await SignInManager.UserManager.FindByEmailAsync(Input.Email);
+            
+            // Check if the user has any roles
+            var roles = await SignInManager.UserManager.GetRolesAsync(user);
 
-            RedirectManager.RedirectTo(ReturnUrl ?? "/appointments");
+            if (roles.Contains("Admin"))
+            {
+                // Redirect to the admin dashboard if the user is an admin
+                RedirectManager.RedirectTo("/admin-dashboard");
+            }
+            else
+            {
+                // Redirect to the default page (appointments page)
+                RedirectManager.RedirectTo(ReturnUrl ?? "/appointments");
+            }
         }
         else if (result.RequiresTwoFactor)
         {
@@ -114,6 +126,7 @@
             errorMessage = "Error: Invalid login attempt.";
         }
     }
+
 
 
     private sealed class InputModel

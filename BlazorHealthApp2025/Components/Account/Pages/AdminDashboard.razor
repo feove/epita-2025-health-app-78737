@@ -1,0 +1,73 @@
+@page "/admin-dashboard"
+@attribute [Authorize(Roles = "Admin")]
+@using BlazorHealthApp2025.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<h3>Manage Users</h3>
+
+@if (users?.Any() == true)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@userRoleMap[user.Id]</td>
+                    <td>
+                        <button class="btn btn-warning" @onclick="() => ChangeUserRole(user)">Change Role</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No users found.</p>
+}
+
+@code {
+    private List<ApplicationUser> users = new();
+    private Dictionary<string, string> userRoleMap = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserManager.Users.ToListAsync();
+        foreach (var user in users)
+        {
+            var roles = await UserManager.GetRolesAsync(user);
+            userRoleMap[user.Id] = roles.FirstOrDefault() ?? "No Role";
+        }
+    }
+
+    private async Task ChangeUserRole(ApplicationUser user)
+    {
+        var currentRole = await UserManager.GetRolesAsync(user);
+        var newRole = currentRole.FirstOrDefault() == "Patient" ? "Doctor" : "Patient"; // Just an example, allow the admin to choose a new role
+
+        // Remove the current role and add the new role
+        await UserManager.RemoveFromRoleAsync(user, currentRole.FirstOrDefault());
+        await UserManager.AddToRoleAsync(user, newRole);
+
+        userRoleMap[user.Id] = newRole; // Update the role in the UI
+
+        // Optionally, log this action
+    }
+}
