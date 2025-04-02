@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
-@using BlazorHealthApp2025.Services  <!-- Add this line -->
+@using BlazorHealthApp2025.Services
 @inject UserManager<ApplicationUser> UserManager
 @inject AdminService AdminService
 @inject NavigationManager NavigationManager
@@ -32,7 +32,25 @@
                     <td>@user.Email</td>
                     <td>@userRoleMap[user.Id]</td>
                     <td>
-                        <button class="btn btn-warning" @onclick="() => ChangeUserRole(user)">Change Role</button>
+                        @if (editingUserId == user.Id)
+                        {
+                            <div onclick="document.querySelector('.navbar-toggler').click()>
+                               @foreach (var role in allRoles)
+                                {
+                                    <label>
+                                        <input type="radio" name="role_@user.Id" value="@role" @onchange="(e) => SelectRole(e, role)" checked="@(selectedRole == role)" />
+                                        @role
+                                    </label>
+                                }
+
+                                <button class="btn btn-success" @onclick="async () => await SaveUserRole(user)">OK</button>
+                                <button class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-warning" @onclick="() => StartEdit(user.Id)">Change Role</button>
+                        }
                     </td>
                 </tr>
             }
@@ -47,8 +65,16 @@ else
 @code {
     private List<ApplicationUser> users = new();
     private Dictionary<string, string> userRoleMap = new();
+    private List<string> allRoles = new() { "Patient", "Doctor", "Admin" };
+    private string? editingUserId;
+    private string selectedRole = "Patient"; // Default role
 
     protected override async Task OnInitializedAsync()
+    {
+        await LoadUsersAndRolesAsync();
+    }
+
+    private async Task LoadUsersAndRolesAsync()
     {
         users = await UserManager.Users.ToListAsync();
         foreach (var user in users)
@@ -56,18 +82,47 @@ else
             var roles = await UserManager.GetRolesAsync(user);
             userRoleMap[user.Id] = roles.FirstOrDefault() ?? "No Role";
         }
+        StateHasChanged();
     }
 
-    private async Task ChangeUserRole(ApplicationUser user)
+    private void StartEdit(string userId)
     {
+        editingUserId = userId;
+        selectedRole = userRoleMap.ContainsKey(userId) ? userRoleMap[userId] : "Patient";
+        StateHasChanged();
+    }
+
+    private void CancelEdit()
+    {
+        editingUserId = null;
+        selectedRole = "Patient";
+        StateHasChanged();
+    }
+
+    private void SelectRole(ChangeEventArgs e, string role)
+    {
+        selectedRole = role;
+    }
+
+    private async Task SaveUserRole(ApplicationUser user)
+    {
+        if (string.IsNullOrEmpty(selectedRole))
+        {
+            Console.WriteLine("Error: No role selected.");
+            return;
+        }
+
         var currentRoles = await UserManager.GetRolesAsync(user);
         var currentRole = currentRoles.FirstOrDefault() ?? "No Role";
-        
-        var newRole = currentRole == "Patient" ? "Doctor" : "Patient";
 
-        await AdminService.RemoveRoleFromUser(user, currentRole);
-        await AdminService.AddRoleToUser(user, newRole);
+        if (currentRole != "No Role")
+        {
+            await AdminService.RemoveRoleFromUser(user, currentRole);
+        }
 
-        userRoleMap[user.Id] = newRole;
+        await AdminService.AddRoleToUser(user, selectedRole);
+        userRoleMap[user.Id] = selectedRole;
+        editingUserId = null;
+        await LoadUsersAndRolesAsync();
     }
 }

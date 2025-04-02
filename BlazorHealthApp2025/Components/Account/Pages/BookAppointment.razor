@@ -67,12 +67,14 @@ else
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        if ( user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var userId = user.FindFirst(c => c.Type == "sub")?.Value;
 
             // Check if the user has the "Patient" role
+        
             isPatient = await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(user), "Patient");
+          
 
             if (isPatient)
             {
