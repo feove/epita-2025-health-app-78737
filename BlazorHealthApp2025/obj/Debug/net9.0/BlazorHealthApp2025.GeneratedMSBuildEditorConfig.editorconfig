@@ -32,10 +32,6 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXEFjY2Vzc0RlbmllZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ibore/webApp/epita-2025-health-app-78737/BlazorHealthApp2025/Components/Account/Pages/AdminDashboard.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXEFkbWluRGFzaGJvYXJkLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/ibore/webApp/epita-2025-health-app-78737/BlazorHealthApp2025/Components/Account/Pages/BookAppointment.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXEJvb2tBcHBvaW50bWVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -186,6 +182,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/ibore/webApp/epita-2025-health-app-78737/BlazorHealthApp2025/Components/App.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ibore/webApp/epita-2025-health-app-78737/BlazorHealthApp2025/Components/Pages/AdminDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pbkRhc2hib2FyZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/ibore/webApp/epita-2025-health-app-78737/BlazorHealthApp2025/Components/Pages/Auth.razor]

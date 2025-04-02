@@ -2,6 +2,7 @@
 @using BlazorHealthApp2025.Data
 
 @inject SignInManager<ApplicationUser> SignInManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <ul class="nav nav-pills flex-column">
     <li class="nav-item">
@@ -19,19 +20,31 @@
             <NavLink class="nav-link" href="Account/Manage/ExternalLogins">External logins</NavLink>
         </li>
     }
+    @if (isAuthenticated)
+    {
+        <li class="nav-item">
+            <NavLink class="nav-link" href="/appointments">Book Appointment</NavLink>
+        </li>
+    }
+    
     <li class="nav-item">
         <NavLink class="nav-link" href="Account/Manage/TwoFactorAuthentication">Two-factor authentication</NavLink>
     </li>
     <li class="nav-item">
         <NavLink class="nav-link" href="Account/Manage/PersonalData">Personal data</NavLink>
     </li>
+
+
 </ul>
 
 @code {
     private bool hasExternalLogins;
+    private bool isAuthenticated;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
         hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
     }
 }

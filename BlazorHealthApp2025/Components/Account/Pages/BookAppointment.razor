@@ -1,5 +1,5 @@
 @page "/appointments"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Patient")]
 @using Microsoft.AspNetCore.Authorization
 @using BlazorHealthApp2025.Data
 @inject NavigationManager NavigationManager

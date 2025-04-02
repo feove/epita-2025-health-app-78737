@@ -4,6 +4,7 @@ using BlazorHealthApp2025.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BlazorHealthApp2025.Services; // Add this line
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,6 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-
 
 builder.Services.AddAuthentication(options =>
     {
@@ -35,6 +35,8 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
+// Register AdminService
+builder.Services.AddScoped<AdminService>();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
@@ -48,12 +50,10 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseAntiforgery();
 
@@ -61,7 +61,6 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-// Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
 using (var scope = app.Services.CreateScope())
@@ -76,6 +75,5 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
-
 
 app.Run();

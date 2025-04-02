@@ -4,13 +4,14 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
+@using BlazorHealthApp2025.Services  <!-- Add this line -->
 @inject UserManager<ApplicationUser> UserManager
-@inject ApplicationDbContext DbContext
+@inject AdminService AdminService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Admin Dashboard</PageTitle>
 
-<h3>Manage Users</h3>
+<h3>Admin Dashboard</h3>
 
 @if (users?.Any() == true)
 {
@@ -59,15 +60,14 @@ else
 
     private async Task ChangeUserRole(ApplicationUser user)
     {
-        var currentRole = await UserManager.GetRolesAsync(user);
-        var newRole = currentRole.FirstOrDefault() == "Patient" ? "Doctor" : "Patient"; // Just an example, allow the admin to choose a new role
+        var currentRoles = await UserManager.GetRolesAsync(user);
+        var currentRole = currentRoles.FirstOrDefault() ?? "No Role";
+        
+        var newRole = currentRole == "Patient" ? "Doctor" : "Patient";
 
-        // Remove the current role and add the new role
-        await UserManager.RemoveFromRoleAsync(user, currentRole.FirstOrDefault());
-        await UserManager.AddToRoleAsync(user, newRole);
+        await AdminService.RemoveRoleFromUser(user, currentRole);
+        await AdminService.AddRoleToUser(user, newRole);
 
-        userRoleMap[user.Id] = newRole; // Update the role in the UI
-
-        // Optionally, log this action
+        userRoleMap[user.Id] = newRole;
     }
 }
