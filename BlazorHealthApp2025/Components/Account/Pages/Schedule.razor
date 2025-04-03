@@ -1,0 +1,120 @@
+@page "/schedule"
+@using System.Globalization
+@inject NavigationManager NavigationManager
+
+<PageTitle>Schedule</PageTitle>
+
+<h3 class="calendar-header">Select Your Appointment</h3>
+
+<div class="calendar-container">
+    <!-- Navigation for months -->
+    <div class="calendar-navigation">
+        <button class="nav-btn" @onclick="PreviousMonth">&lt;</button>
+        <span class="calendar-month-title">@currentMonth.ToString("MMMM yyyy")</span>
+        <button class="nav-btn" @onclick="NextMonth">&gt;</button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar">
+        <div class="calendar-weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div class="calendar-days">
+            @foreach (var day in GetCalendarDays(currentMonth))
+            {
+                <div class="calendar-day @(IsAvailableDay(day) ? "available" : "unavailable") @(day == selectedDay ? "selected" : "")"
+                     @onclick="() => SelectDay(day)">
+                    @day.Day
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (selectedDay != DateTime.MinValue)
+    {
+        <div class="appointment-popup">
+            <h4>Select Appointment Time for @selectedDay.ToString("D")</h4>
+            <input type="time" @bind="selectedTime" />
+            <button @onclick="ConfirmSelection" class="btn">Confirm Appointment</button>
+        </div>
+    }
+</div>
+
+@code {
+    private DateTime currentMonth;
+    private DateTime selectedDay = DateTime.MinValue;
+    private TimeOnly? selectedTime = null;
+
+    private List<DateTime> availableDays = new List<DateTime>();
+
+    // This method is called when the component is initialized
+    protected override void OnInitialized()
+    {
+        currentMonth = DateTime.Now; // Set currentMonth to the current date when the component initializes
+        availableDays.Add(new DateTime(currentMonth.Year, currentMonth.Month, 1));
+        availableDays.Add(new DateTime(currentMonth.Year, currentMonth.Month, 5));
+        availableDays.Add(new DateTime(currentMonth.Year, currentMonth.Month, 10));
+        availableDays.Add(new DateTime(currentMonth.Year, currentMonth.Month, 15));
+    }
+
+    private List<DateTime> GetCalendarDays(DateTime month)
+    {
+        var firstDayOfMonth = new DateTime(month.Year, month.Month, 1);
+        var daysInMonth = DateTime.DaysInMonth(month.Year, month.Month);
+        var days = new List<DateTime>();
+
+        // Fill the calendar with days, starting from the first day of the month
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            days.Add(new DateTime(month.Year, month.Month, day));
+        }
+
+        // Add padding for the first week (if necessary)
+        var firstDayWeekday = (int)firstDayOfMonth.DayOfWeek;
+        for (int i = 0; i < firstDayWeekday; i++)
+        {
+            days.Insert(0, DateTime.MinValue); // Adding empty cells at the start
+        }
+
+        // Ensure that we have 42 days (6 weeks) on the calendar
+        while (days.Count < 42)
+        {
+            days.Add(DateTime.MinValue); // Adding empty cells at the end
+        }
+
+        return days;
+    }
+
+    private void SelectDay(DateTime day)
+    {
+        if (day != DateTime.MinValue && IsAvailableDay(day))
+        {
+            selectedDay = day;
+            selectedTime = null; // Reset time when day is selected
+        }
+    }
+
+    private void ConfirmSelection()
+    {
+        if (selectedDay != DateTime.MinValue && selectedTime != null)
+        {
+            DateTime appointmentDateTime = selectedDay.Date + selectedTime.Value.ToTimeSpan();
+            Console.WriteLine($"Appointment confirmed for {appointmentDateTime}");
+        }
+    }
+
+    private bool IsAvailableDay(DateTime day)
+    {
+        return availableDays.Contains(day);
+    }
+
+    private void PreviousMonth() => currentMonth = currentMonth.AddMonths(-1);
+
+    private void NextMonth() => currentMonth = currentMonth.AddMonths(1);
+}
