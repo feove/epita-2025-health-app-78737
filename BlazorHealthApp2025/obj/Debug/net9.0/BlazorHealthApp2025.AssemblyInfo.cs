@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlazorHealthApp2025")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf6422f22e68d208c6788c27815e63ebf51bedb9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e30aaf35a928fca5882c31075d1eb5d9b111d64")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlazorHealthApp2025")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlazorHealthApp2025")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
