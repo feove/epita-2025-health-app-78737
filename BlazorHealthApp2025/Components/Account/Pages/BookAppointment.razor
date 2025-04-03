@@ -149,7 +149,7 @@ else
 
         if (user.Identity != null && user.Identity.IsAuthenticated && isPatient)
         {
-            var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            var userId = user.FindFirst(c => c.Type == "sub")?.Value;
             var appUser = await UserManager.FindByIdAsync(userId);
 
             if (appUser != null && appUser.TempAppointmentDate.HasValue && !string.IsNullOrEmpty(appUser.TempAppointmentTime))

@@ -28,6 +28,8 @@
             <div class="calendar-day-name">@dayName</div>
         }
 
+
+
         @foreach (var day in days)
         {
            <div class="calendar-day @(day.IsAvailable ? "available" : "busy") @(day.IsSelected ? "selected" : "")"
@@ -38,7 +40,7 @@
                     <div class="busy-indicator">Busy</div>
                 }
             </div>
-            @if (!day.IsAvailable)
+            @if (!day.IsAvailable) //And role of user is admin
             {
                 <button class="btn btn-danger btn-sm" @onclick="() => DeleteAppointment(day.Number)">Delete</button>
             }
@@ -75,12 +77,13 @@
 
     private List<string> availableTimeSlots = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        GenerateCalendar();
+        await GenerateCalendar();
     }
 
-   private async void GenerateCalendar()
+
+   private async Task GenerateCalendar()
     {
         days.Clear();
         int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
@@ -90,6 +93,7 @@
         var user = authState.User;
         var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
 
+        // This line is causing the error when connection is already disposed
         var appointments = await DbContext.Appointments
             .Where(a => a.AppointmentDate.Month == currentDate.Month && a.AppointmentDate.Year == currentDate.Year)
             .ToListAsync();
@@ -105,16 +109,17 @@
 
 
 
-    private void NextMonth()
+
+  private async Task NextMonth()
     {
         currentDate = currentDate.AddMonths(1);
-        GenerateCalendar();
+        await GenerateCalendar();
     }
 
-    private void PreviousMonth()
+    private async Task PreviousMonth()
     {
         currentDate = currentDate.AddMonths(-1);
-        GenerateCalendar();
+        await GenerateCalendar();
     }
 
     private void SelectDay(Day day)
@@ -172,7 +177,6 @@
 
     NavigationManager.NavigateTo("/appointments");
 }
-
 
     
     private async Task DeleteAppointment(int dayNumber)
