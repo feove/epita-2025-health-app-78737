@@ -9,6 +9,7 @@
 @using Microsoft.AspNetCore.Identity
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
 
 <PageTitle>Book Appointment</PageTitle>
 
@@ -20,9 +21,9 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <div class="form-floating mb-3">
-            <InputDate @bind-Value="appointment.AppointmentDate" class="form-control" />
-            <label>Appointment Date</label>
+        <!-- Removed Appointment Date Input, replaced with Go Schedule Button -->
+        <div class="mb-3">
+            <button class="btn btn-info" @onclick="GoToSchedulePage">Go to Schedule</button>
         </div>
 
         <div class="form-floating mb-3">
@@ -30,7 +31,32 @@
             <label>Description</label>
         </div>
 
-        <button type="submit" class="btn btn-primary">Book Appointment</button>
+        <div class="form-floating mb-3">
+            <input @bind="doctorSearch" @oninput="SearchDoctors" placeholder="Search Doctor" class="form-control" />
+            <label>Search Doctor</label>
+            <ul class="list-group mt-2">
+                @foreach (var doctor in filteredDoctors)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@doctor.UserName</span>
+                        <button class="btn @((doctor.Id == selectedDoctorId) ? "btn-success" : "btn-outline-primary")" @onclick="() => ToggleDoctorSelection(doctor)">
+                            @if (doctor.Id == selectedDoctorId)
+                            {
+                                <span>✓ Selected</span>
+                            }
+                            else
+                            {
+                                <span>Select</span>
+                            }
+                        </button>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <p>Selected Doctor: @selectedDoctorName</p>
+
+        <button type="submit" class="btn btn-primary" disabled="@(string.IsNullOrEmpty(selectedDoctorId) || appointment.Description == string.Empty)">Book Appointment</button>
     </EditForm>
 
     <hr />
@@ -42,7 +68,7 @@
             @foreach (var appt in appointments)
             {
                 <li class="list-group-item">
-                    <strong>@appt.AppointmentDate.ToString("f"):</strong> @appt.Description
+                    <strong>@appt.AppointmentDate.ToString("f"):</strong> @appt.Description - Doctor: @appt.DoctorName
                 </li>
             }
         </ul>
@@ -60,6 +86,11 @@ else
 @code {
     private Appointment appointment = new();
     private List<Appointment> appointments = new();
+    private List<ApplicationUser> doctors = new();
+    private List<ApplicationUser> filteredDoctors = new();
+    private string doctorSearch = string.Empty;
+    private string selectedDoctorId = string.Empty;
+    private string selectedDoctorName = "None";
     private bool isPatient = false;
 
     protected override async Task OnInitializedAsync()
@@ -67,23 +98,49 @@ else
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if ( user.Identity is not null && user.Identity.IsAuthenticated)
+        if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            var userId = user.FindFirst(c => c.Type == "sub")?.Value;
-
-            // Check if the user has the "Patient" role
-        
-            isPatient = await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(user), "Patient");
-          
+            var userId = user?.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            var appUser = await UserManager.GetUserAsync(user);
+            isPatient = appUser != null && await UserManager.IsInRoleAsync(appUser, "Patient");
 
             if (isPatient)
             {
-                // Fetch appointments if the user is a patient
-                appointments = await DbContext.Appointments
-                    .Where(a => a.PatientId == userId)
-                    .ToListAsync();
+                appointments = await DbContext.Appointments.Where(a => a.PatientId == userId).ToListAsync();
+                doctors = (await UserManager.GetUsersInRoleAsync("Doctor")).ToList();
+                filteredDoctors = doctors;
             }
         }
+    }
+
+    private void SearchDoctors(ChangeEventArgs e)
+    {
+        var searchQuery = e.Value?.ToString()?.ToLower() ?? string.Empty;
+        filteredDoctors = doctors.Where(d => d.UserName.ToLower().Contains(searchQuery)).ToList();
+        StateHasChanged(); // Explicitly update the UI
+    }
+
+    private void ToggleDoctorSelection(ApplicationUser doctor)
+    {
+        if (doctor.Id == selectedDoctorId)
+        {
+            // Unselect the doctor if the same one is clicked
+            selectedDoctorId = string.Empty;
+            selectedDoctorName = "None";
+        }
+        else
+        {
+            // Select the doctor
+            selectedDoctorId = doctor.Id;
+            selectedDoctorName = doctor.UserName;
+        }
+        StateHasChanged(); // Ensure UI is updated after toggling selection
+    }
+
+    private void GoToSchedulePage()
+    {
+        // Redirect to the schedule page when the button is clicked
+        NavigationManager.NavigateTo("/schedule"); // Modify this to your schedule page URL
     }
 
     private async Task SubmitAppointment()
@@ -91,14 +148,22 @@ else
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity is not null && user.Identity.IsAuthenticated && isPatient)
+        if (user.Identity != null && user.Identity.IsAuthenticated && isPatient)
         {
-            appointment.PatientId = user.FindFirst(c => c.Type == "sub")?.Value ?? "";
+            // Ensure PatientId and DoctorId are set before submitting
+            appointment.PatientId = user?.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            appointment.DoctorId = selectedDoctorId; // Selected doctor's ID
+            appointment.DoctorName = selectedDoctorName;
+
+            // Save the appointment to the database
             DbContext.Appointments.Add(appointment);
             await DbContext.SaveChangesAsync();
             appointments.Add(appointment);
 
-            appointment = new Appointment();  // Reset the form
+            // Reset the form
+            appointment = new Appointment();
+            selectedDoctorId = string.Empty;
+            selectedDoctorName = "None";
         }
     }
 }

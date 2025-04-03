@@ -18,5 +18,12 @@ namespace BlazorHealthApp2025.Data
         [StringLength(200)]
         [Display(Name = "Description")]
         public string Description { get; set; } = string.Empty;
+
+        // New Properties for Doctor Selection
+        [Required]
+        public string DoctorId { get; set; } = string.Empty;
+
+        [Display(Name = "Doctor Name")]
+        public string DoctorName { get; set; } = string.Empty;
     }
 }
