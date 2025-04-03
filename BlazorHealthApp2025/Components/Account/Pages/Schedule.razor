@@ -1,38 +1,85 @@
 @page "/schedule"
 @using System.Globalization
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
-<h2>Select Your Appointment</h2>
+<div class="calendar-container">
+    <h1 class="calendar-header">Select Your Appointment</h1>
 
-<div class="calendar">
-    <div class="calendar-header">
-        <button @onclick="PreviousMonth">&#8592;</button>
-        <span>@currentDate.ToString("MMMM yyyy", CultureInfo.CurrentCulture)</span>
-        <button @onclick="NextMonth">&#8594;</button>
+    <div class="calendar-navigation">
+        <button class="nav-btn" @onclick="PreviousMonth">&#8592;</button>
+        <div class="calendar-month-title">@currentMonth @currentYear</div>
+        <button class="nav-btn" @onclick="NextMonth">&#8594;</button>
     </div>
-    <div class="calendar-grid">
-        @foreach (var day in dayNames)
+
+    <div class="calendar">
+        @foreach (var dayName in dayNames)
         {
-            <div class="calendar-day">@day</div>
+            <div class="calendar-day-name">@dayName</div>
         }
 
-        @foreach (var day in Enumerable.Range(1, DateTime.DaysInMonth(currentDate.Year, currentDate.Month)))
+        @foreach (var day in days)
         {
-            <div class="calendar-date" @onclick="() => SelectDate(day)" style="@GetDayStyle(day)">@day</div>
+            <div class="calendar-day @(day.IsAvailable ? "available" : "unavailable") @(day.IsSelected ? "selected" : "")"
+                 @onclick="() => SelectDay(day)">
+                @day.Number
+            </div>
         }
     </div>
+
+    <button class="confirm-btn" @onclick="ConfirmAppointment">Confirm</button>
 </div>
 
 @code {
     private DateTime currentDate = DateTime.Now;
-    private string[] dayNames = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames;
-    private int selectedDay = -1;
+    private string currentMonth => currentDate.ToString("MMMM");
+    private int currentYear => currentDate.Year;
+    private List<string> dayNames = new() { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    private List<Day> days = new();
 
-    private void PreviousMonth() => currentDate = currentDate.AddMonths(-1);
-    private void NextMonth() => currentDate = currentDate.AddMonths(1);
-    private void SelectDate(int day) => selectedDay = day;
-
-    private string GetDayStyle(int day)
+    protected override void OnInitialized()
     {
-        return day == selectedDay ? "background-color: lightgreen;" : "";
+        GenerateCalendar();
+    }
+
+    private void GenerateCalendar()
+    {
+        days.Clear();
+        int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+
+        for (int i = 1; i <= daysInMonth; i++)
+        {
+            days.Add(new Day { Number = i, IsAvailable = true });
+        }
+    }
+
+    private void NextMonth()
+    {
+        currentDate = currentDate.AddMonths(1);
+        GenerateCalendar();
+    }
+
+    private void PreviousMonth()
+    {
+        currentDate = currentDate.AddMonths(-1);
+        GenerateCalendar();
+    }
+
+    private void SelectDay(Day day)
+    {
+        foreach (var d in days) d.IsSelected = false;
+        day.IsSelected = true;
+    }
+
+    private void ConfirmAppointment()
+    {
+         NavigationManager.NavigateTo("/appointments");
+    }
+
+    public class Day
+    {
+        public int Number { get; set; }
+        public bool IsAvailable { get; set; }
+        public bool IsSelected { get; set; }
     }
 }
