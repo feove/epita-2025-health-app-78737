@@ -63,6 +63,7 @@ h1:focus {
 
 
 /* Adjusted CSS for Calendar Header Alignment and Spacing */
+/* Adjusted CSS for Calendar Header Alignment and Spacing */
 .calendar-container {
     max-width: 800px;
     margin: 20px auto;
@@ -141,18 +142,54 @@ h1:focus {
     color: #aaa;
 }
 
-.confirm-btn {
+.time-slot-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
     margin-top: 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.time-slot-selector select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 18px;
+    width: 180px;
+    transition: border-color 0.3s ease;
+}
+
+.time-slot-selector select:focus {
+    border-color: #4285f4;
+    outline: none;
+}
+
+.confirm-btn {
     background-color: #34a853;
     color: #fff;
-    padding: 15px 30px;
+    padding: 12px 24px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 20px;
-    transition: background-color 0.3s ease;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .confirm-btn:hover {
     background-color: #2c8e46;
+    transform: scale(1.05);
+}
+
+.busy {
+    background-color: orange;
+    color: white;
+}
+
+.busy-indicator {
+    font-size: 0.8em;
+    text-align: center;
 }

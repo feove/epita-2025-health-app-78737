@@ -5,6 +5,13 @@ namespace BlazorHealthApp2025.Data
     public class ApplicationUser : IdentityUser
     {
         public string Role { get; set; } = "Patient";  
+        public DateTime? TempAppointmentDate { get; set; }
+        public string TempAppointmentTime { get; set; } = string.Empty;
+
+        public ICollection<Appointment>? Appointments { get; set; }
+
+        // New Property: Confirmation Status
+        public bool ConfirmedByDoctor { get; set; } = false;
     }
 
     public class ApplicationDbContextSeed

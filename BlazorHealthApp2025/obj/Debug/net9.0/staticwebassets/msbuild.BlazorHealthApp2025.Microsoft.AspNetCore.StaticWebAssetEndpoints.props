@@ -3,26 +3,26 @@
     <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/app.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"3515"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 13:32:56 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4jYAM/JIuyV6WgwfVcZbHxDRitbZSTI65Hkc4JOUpeo="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5499"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00224jYAM/JIuyV6WgwfVcZbHxDRitbZSTI65Hkc4JOUpeo=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 17:25:34 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/app.wt1u3tnvaw.css">
+    <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/app.m75e504fc6.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"wt1u3tnvaw"},{"Name":"integrity","Value":"sha256-xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c="},{"Name":"label","Value":"_content/BlazorHealthApp2025/app.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3515"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 13:32:56 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"m75e504fc6"},{"Name":"integrity","Value":"sha256-4jYAM/JIuyV6WgwfVcZbHxDRitbZSTI65Hkc4JOUpeo="},{"Name":"label","Value":"_content/BlazorHealthApp2025/app.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5499"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00224jYAM/JIuyV6WgwfVcZbHxDRitbZSTI65Hkc4JOUpeo=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 17:25:34 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/BlazorHealthApp2025.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\BlazorHealthApp2025.xqn521guv5.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-h5IOAVB1ztzAVyQYxlhIg2XsO63wl/hAnKVpCu6eOV4="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"8273"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022h5IOAVB1ztzAVyQYxlhIg2XsO63wl/hAnKVpCu6eOV4=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 13:41:25 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"8273"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022h5IOAVB1ztzAVyQYxlhIg2XsO63wl/hAnKVpCu6eOV4=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 17:33:09 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/BlazorHealthApp2025.xqn521guv5.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\BlazorHealthApp2025.xqn521guv5.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"xqn521guv5"},{"Name":"integrity","Value":"sha256-h5IOAVB1ztzAVyQYxlhIg2XsO63wl/hAnKVpCu6eOV4="},{"Name":"label","Value":"_content/BlazorHealthApp2025/BlazorHealthApp2025.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8273"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022h5IOAVB1ztzAVyQYxlhIg2XsO63wl/hAnKVpCu6eOV4=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 13:41:25 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8273"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022h5IOAVB1ztzAVyQYxlhIg2XsO63wl/hAnKVpCu6eOV4=\u0022"},{"Name":"Last-Modified","Value":"Thu, 03 Apr 2025 17:33:09 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/favicon.ifv42okdf2.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\favicon.png'))</AssetFile>

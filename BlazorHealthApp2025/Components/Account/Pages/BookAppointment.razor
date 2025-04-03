@@ -149,20 +149,33 @@ else
 
         if (user.Identity != null && user.Identity.IsAuthenticated && isPatient)
         {
-            // Ensure PatientId and DoctorId are set before submitting
-            appointment.PatientId = user?.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
-            appointment.DoctorId = selectedDoctorId; // Selected doctor's ID
-            appointment.DoctorName = selectedDoctorName;
+            var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            var appUser = await UserManager.FindByIdAsync(userId);
 
-            // Save the appointment to the database
-            DbContext.Appointments.Add(appointment);
-            await DbContext.SaveChangesAsync();
-            appointments.Add(appointment);
+            if (appUser != null && appUser.TempAppointmentDate.HasValue && !string.IsNullOrEmpty(appUser.TempAppointmentTime))
+            {
+                appointment.PatientId = userId;
+                appointment.AppointmentDate = appUser.TempAppointmentDate.Value
+                    .Add(TimeSpan.Parse(appUser.TempAppointmentTime));
+                appointment.DoctorId = selectedDoctorId;
+                appointment.DoctorName = selectedDoctorName;
 
-            // Reset the form
-            appointment = new Appointment();
-            selectedDoctorId = string.Empty;
-            selectedDoctorName = "None";
+                // Save the appointment to the database
+                DbContext.Appointments.Add(appointment);
+                await DbContext.SaveChangesAsync();
+                appointments.Add(appointment);
+
+                // Clear temp appointment data
+                appUser.TempAppointmentDate = null;
+                appUser.TempAppointmentTime = string.Empty;
+                await UserManager.UpdateAsync(appUser);
+
+                // Reset the form
+                appointment = new Appointment();
+                selectedDoctorId = string.Empty;
+                selectedDoctorName = "None";
+            }
         }
     }
+
 }
