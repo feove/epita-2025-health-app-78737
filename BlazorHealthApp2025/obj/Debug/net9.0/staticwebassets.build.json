@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "oPTuMKXYbyz5JGJ5TsbFFzlClsCEbYmaGXBQgeh6Iig=",
+  "Hash": "DCPKZ8mqLl2Vor23zLP3DzH2W2HeGqoJc3btNcVH/SU=",
   "Source": "BlazorHealthApp2025",
   "BasePath": "_content/BlazorHealthApp2025",
   "Mode": "Default",
@@ -521,12 +521,12 @@
       "OriginalItemSpec": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Identity": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-9uzbg0dqp8.gz",
+      "Identity": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-wt1u3tnvaw.gz",
       "SourceId": "BlazorHealthApp2025",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/BlazorHealthApp2025",
-      "RelativePath": "app#[.{fingerprint=9uzbg0dqp8}]?.css.gz",
+      "RelativePath": "app#[.{fingerprint=wt1u3tnvaw}]?.css.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -535,8 +535,8 @@
       "RelatedAsset": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\wwwroot\\app.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "ss4ha6a5q6",
-      "Integrity": "jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0=",
+      "Fingerprint": "s9qdyis8u7",
+      "Integrity": "wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\wwwroot\\app.css"
@@ -1060,8 +1060,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "9uzbg0dqp8",
-      "Integrity": "zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY=",
+      "Fingerprint": "wt1u3tnvaw",
+      "Integrity": "xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\app.css"
@@ -2014,13 +2014,13 @@
   ],
   "Endpoints": [
     {
-      "Route": "app.9uzbg0dqp8.css",
-      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-9uzbg0dqp8.gz",
+      "Route": "app.css",
+      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-wt1u3tnvaw.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000475963827"
+          "Quality": "0.000547945205"
         }
       ],
       "ResponseHeaders": [
@@ -2030,19 +2030,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2100"
+          "Value": "1824"
         },
         {
           "Name": "ETag",
-          "Value": "\"jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0=\""
+          "Value": "\"wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:01 GMT"
+          "Value": "Thu, 03 Apr 2025 13:32:56 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
+          "Value": "no-cache"
         },
         {
           "Name": "Content-Encoding",
@@ -2058,26 +2058,18 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY=\""
+          "Value": "W/\"xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=\""
         }
       ],
       "EndpointProperties": [
         {
-          "Name": "fingerprint",
-          "Value": "9uzbg0dqp8"
-        },
-        {
-          "Name": "label",
-          "Value": "app.css"
-        },
-        {
           "Name": "integrity",
-          "Value": "sha256-zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY="
+          "Value": "sha256-xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c="
         }
       ]
     },
     {
-      "Route": "app.9uzbg0dqp8.css",
+      "Route": "app.css",
       "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\wwwroot\\app.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2087,7 +2079,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4979"
+          "Value": "3515"
         },
         {
           "Name": "Content-Type",
@@ -2095,11 +2087,156 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY=\""
+          "Value": "\"xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:01 GMT"
+          "Value": "Thu, 03 Apr 2025 13:32:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c="
+        }
+      ]
+    },
+    {
+      "Route": "app.css.gz",
+      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-wt1u3tnvaw.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1824"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 03 Apr 2025 13:32:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4="
+        }
+      ]
+    },
+    {
+      "Route": "app.wt1u3tnvaw.css",
+      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-wt1u3tnvaw.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000547945205"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1824"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 03 Apr 2025 13:32:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "wt1u3tnvaw"
+        },
+        {
+          "Name": "label",
+          "Value": "app.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c="
+        }
+      ]
+    },
+    {
+      "Route": "app.wt1u3tnvaw.css",
+      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\wwwroot\\app.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3515"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 03 Apr 2025 13:32:56 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2109,7 +2246,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "9uzbg0dqp8"
+          "Value": "wt1u3tnvaw"
         },
         {
           "Name": "label",
@@ -2117,13 +2254,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY="
+          "Value": "sha256-xAtFo1Ofy8wMjvwIZyCAwWwHxoI8uKWvm5Zfvdg/63c="
         }
       ]
     },
     {
-      "Route": "app.9uzbg0dqp8.css.gz",
-      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-9uzbg0dqp8.gz",
+      "Route": "app.wt1u3tnvaw.css.gz",
+      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-wt1u3tnvaw.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2132,7 +2269,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2100"
+          "Value": "1824"
         },
         {
           "Name": "Content-Type",
@@ -2140,11 +2277,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0=\""
+          "Value": "\"wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:01 GMT"
+          "Value": "Thu, 03 Apr 2025 13:32:56 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2162,7 +2299,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "9uzbg0dqp8"
+          "Value": "wt1u3tnvaw"
         },
         {
           "Name": "label",
@@ -2170,144 +2307,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0="
-        }
-      ]
-    },
-    {
-      "Route": "app.css",
-      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-9uzbg0dqp8.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.000475963827"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2100"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:01 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY=\""
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY="
-        }
-      ]
-    },
-    {
-      "Route": "app.css",
-      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\wwwroot\\app.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "4979"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:01 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-zxX+426QBNL/H1Oj5GueAc726YeQ4id7j4MWV/L4TsY="
-        }
-      ]
-    },
-    {
-      "Route": "app.css.gz",
-      "AssetFile": "C:\\Users\\ibore\\webApp\\epita-2025-health-app-78737\\BlazorHealthApp2025\\obj\\Debug\\net9.0\\compressed\\i51jq4pexj-9uzbg0dqp8.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "2100"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:01 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-jDQscCqKN9180HpfxEAxoUSbvM+j8CnYQ4qn3Ph2Mw0="
+          "Value": "sha256-wI8dKnwXNJ+7dLh9AUaQhKDQ+mofJ1Lu8onfGJle+k4="
         }
       ]
     },
@@ -2336,7 +2336,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2389,7 +2389,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2426,7 +2426,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2473,7 +2473,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2526,7 +2526,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2563,7 +2563,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2610,7 +2610,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2671,7 +2671,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2716,7 +2716,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2771,7 +2771,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2832,7 +2832,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2877,7 +2877,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 03 Apr 2025 10:15:12 GMT"
+          "Value": "Thu, 03 Apr 2025 13:33:08 GMT"
         },
         {
           "Name": "Cache-Control",

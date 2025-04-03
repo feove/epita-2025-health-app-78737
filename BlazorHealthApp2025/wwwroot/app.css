@@ -62,123 +62,32 @@ h1:focus {
 
 
 
-/* Calendar Container */
-.calendar-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-}
-
-.calendar-header-text {
+/* Adjusted CSS for Calendar Header Alignment and Spacing */
+.calendar {
+    width: 300px;
+    margin: auto;
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
 }
-
-.calendar-navigation {
+.calendar-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-bottom: 10px;
 }
-
-.nav-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
 }
-
-.nav-btn:hover {
-    background-color: #0056b3;
-}
-
-.calendar-month-title {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.calendar {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-.calendar-day-names {
-    display: flex;
-    width: 100%;
-}
-
-.calendar-day-name {
-    flex: 1;
-    text-align: center;
-    font-weight: bold;
-    padding: 10px;
-    background-color: #f7f7f7;
-}
-
-.calendar-body {
-    width: 100%;
-}
-
-.calendar-week {
-    display: flex;
-    width: 100%;
-}
-
 .calendar-day {
-  
-    text-align: center;
-    padding: 15px;
-    cursor: pointer;
-    font-size: 16px;
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    transition: background-color 0.2s;
+    font-weight: bold;
 }
-
-.calendar-day:hover {
-    background-color: #d1e7ff;
-}
-
-.calendar-day.selected {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.calendar-day.empty {
-    background-color: #f7f7f7;
-}
-
-.calendar-day.available {
-    background-color: #e6ffeb;
-}
-
-.appointment-popup {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-
-.appointment-popup h4 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.appointment-popup input[type="time"] {
+.calendar-date {
     padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
-
+.calendar-date:hover {
+    background-color: #ddd;
+}
