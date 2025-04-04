@@ -41,10 +41,7 @@
                     <div class="busy-indicator">Busy</div>
                 }
             </div>
-            @if (!day.IsAvailable && isAdmin) 
-            {
-                <button class="btn btn-danger btn-sm" @onclick="() => DeleteAppointment(day.Number)">Delete</button>
-            }
+            
 
         }
     </div>
@@ -52,21 +49,29 @@
     @if (selectedDay != null)
     {
         <div class="time-slot-container">
-            <div class="time-slot-selector">
-                <select @bind="selectedTimeSlot">
-                    @foreach (var timeSlot in availableTimeSlots)
-                    {
-                        <option value="@timeSlot">@timeSlot</option>
-                    }
-                </select>
-            </div>
-            <button class="confirm-btn" @onclick="ConfirmAppointment">Confirm</button>
-        </div>
-    }
 
-    @if (!string.IsNullOrEmpty(selectedTimeSlot))
-    {
-        <p>Selected Time: @selectedTimeSlot</p>
+            @if (!isAdmin)
+            {
+                <div class="time-slot-selector">
+                    <select @bind="selectedTimeSlot">
+                        @foreach (var timeSlot in availableTimeSlots)
+                        {
+                            var isBusy = busyTimeSlots.Contains(timeSlot);
+                            <option value="@timeSlot" disabled="@isBusy" style="@(isBusy ? "color: orange;" : "")">
+                                @timeSlot @(isBusy ? " - Unavailable" : "")
+                            </option>
+                        }
+                    </select>
+
+                </div>
+                <button class="confirm-btn" @onclick="ConfirmAppointment">Confirm</button>
+            }
+            else if (!selectedDay.IsAvailable)
+            {
+                <button class="btn btn-danger btn-sm mt-2" @onclick="() => DeleteAppointment(selectedDay.Number)">Delete Appointment</button>
+            }
+
+        </div>
     }
 
 </div>
@@ -79,6 +84,7 @@
     private List<Day> days = new();
     private Day? selectedDay = null;
     private string selectedTimeSlot = string.Empty;
+    private List<string> busyTimeSlots = new();
 
     private List<string> availableTimeSlots = new();
 
@@ -133,13 +139,11 @@
         await GenerateCalendar();
     }
 
-    private void SelectDay(Day day)
-    {   
-
-
+    private async void SelectDay(Day day)
+    {
         selectedDay = day;
-        availableTimeSlots = GenerateAvailableTimeSlots(day.Number);
-        selectedTimeSlot = availableTimeSlots.FirstOrDefault() ?? string.Empty;
+        selectedTimeSlot = string.Empty;
+        busyTimeSlots.Clear();
 
         // Mark other days as unselected
         foreach (var d in days) d.IsSelected = false;
@@ -150,7 +154,32 @@
             Console.WriteLine("Error: No day selected.");
             return;
         }
+
+        // Load available time slots
+        availableTimeSlots = GenerateAvailableTimeSlots(day.Number);
+
+        var selectedDate = new DateTime(currentDate.Year, currentDate.Month, day.Number);
+
+        var confirmedAppointments = await DbContext.Appointments
+            .Where(a => a.IsConfirmed && a.AppointmentDate.Date == selectedDate.Date)
+            .ToListAsync();
+
+        var calendarAppointments = await DbContext.CalendarEntries
+            .Where(c => c.Date.Date == selectedDate.Date && c.IsConfirmed)
+            .ToListAsync();
+
+        // Combine busy time slots from both sources
+        foreach (var appointment in confirmedAppointments)
+        {
+            busyTimeSlots.Add(appointment.AppointmentDate.ToString("H:mm"));
+        }
+
+        foreach (var entry in calendarAppointments)
+        {
+            busyTimeSlots.Add(entry.Date.ToString("H:mm"));
+        }
     }
+
 
     private List<string> GenerateAvailableTimeSlots(int day)
     {
@@ -181,53 +210,61 @@
     }
    
     private async Task ConfirmAppointment()
-{
-    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-    var user = authState.User;
-
-    if (user.Identity == null || !user.Identity.IsAuthenticated)
     {
-        Console.WriteLine("User is not authenticated.");
-        return;
-    }
 
-    string? userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                  ?? user.FindFirst("sub")?.Value
-                  ?? user.FindFirst("nameidentifier")?.Value;
+        if (busyTimeSlots.Contains(selectedTimeSlot))
+        {
+            Console.WriteLine("Error: This time slot is already taken.");
+            return;
+        }
 
-    if (string.IsNullOrEmpty(userId))
-    {
-        Console.WriteLine("Error: User ID is null or empty.");
-        return;
-    }
 
-    var appUser = await UserManager.FindByIdAsync(userId);
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
 
-    if (appUser == null)
-    {
-        Console.WriteLine($"Error: No user found with ID {userId}.");
-        return;
-    }
+        if (user.Identity == null || !user.Identity.IsAuthenticated)
+        {
+            Console.WriteLine("User is not authenticated.");
+            return;
+        }
 
-    if (selectedDay != null && !string.IsNullOrEmpty(selectedTimeSlot))
-    {
-        // Save just the temp date/time
-        var appointmentDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
+        string? userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                    ?? user.FindFirst("sub")?.Value
+                    ?? user.FindFirst("nameidentifier")?.Value;
 
-        appUser.TempAppointmentDate = appointmentDate;
-        appUser.TempAppointmentTime = selectedTimeSlot;
+        if (string.IsNullOrEmpty(userId))
+        {
+            Console.WriteLine("Error: User ID is null or empty.");
+            return;
+        }
 
-        await UserManager.UpdateAsync(appUser);
+        var appUser = await UserManager.FindByIdAsync(userId);
 
-        Console.WriteLine($"Temp appointment saved for user {appUser.Email} on {appointmentDate.ToShortDateString()} at {selectedTimeSlot}.");
+        if (appUser == null)
+        {
+            Console.WriteLine($"Error: No user found with ID {userId}.");
+            return;
+        }
 
-        // Navigate back to the main appointment page
-        NavigationManager.NavigateTo("/appointments");
-    }
-    else
-    {
-        Console.WriteLine("Error: You must pick a date and time from the schedule first.");
-    }
+        if (selectedDay != null && !string.IsNullOrEmpty(selectedTimeSlot))
+        {
+            // Save just the temp date/time
+            var appointmentDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
+
+            appUser.TempAppointmentDate = appointmentDate;
+            appUser.TempAppointmentTime = selectedTimeSlot;
+
+            await UserManager.UpdateAsync(appUser);
+
+            Console.WriteLine($"Temp appointment saved for user {appUser.Email} on {appointmentDate.ToShortDateString()} at {selectedTimeSlot}.");
+
+            // Navigate back to the main appointment page
+            NavigationManager.NavigateTo("/appointments");
+        }
+        else
+        {
+            Console.WriteLine("Error: You must pick a date and time from the schedule first.");
+        }
 }
 
     public class Day
