@@ -182,87 +182,51 @@
    
     private async Task ConfirmAppointment()
 {
-    // Get the current authentication state to access the user's information
     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
     var user = authState.User;
 
-    // Check if the user is authenticated
     if (user.Identity == null || !user.Identity.IsAuthenticated)
     {
         Console.WriteLine("User is not authenticated.");
         return;
     }
 
-    // Log the user's claims for debugging purposes
-    foreach (var claim in user.Claims)
-    {
-        Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
-    }
+    string? userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                  ?? user.FindFirst("sub")?.Value
+                  ?? user.FindFirst("nameidentifier")?.Value;
 
-    // Retrieve the user's ID from claims
-    string? userId = null;
-
-    // First, try to get the NameIdentifier claim (preferred claim for user ID)
-    var claimNameIdentifier = user.FindFirst(ClaimTypes.NameIdentifier);
-    if (claimNameIdentifier != null)
-    {
-        userId = claimNameIdentifier.Value;
-    }
-    else
-    {
-        // If the NameIdentifier claim is not found, try "sub" or "nameidentifier" claims
-        var claimAlt = user.FindFirst(c => c.Type == "sub")
-                       ?? user.FindFirst(c => c.Type == "nameidentifier");
-        if (claimAlt != null)
-        {
-            userId = claimAlt.Value;
-        }
-    }
-
-    // Log the retrieved user ID
-    Console.WriteLine($"Retrieved userId: {userId}");
-
-    // Check if userId is null or empty, and handle the error if necessary
     if (string.IsNullOrEmpty(userId))
     {
         Console.WriteLine("Error: User ID is null or empty.");
         return;
     }
 
-    // Retrieve the user from the database using the userId
     var appUser = await UserManager.FindByIdAsync(userId);
 
-    // Check if the user was found in the database
     if (appUser == null)
     {
         Console.WriteLine($"Error: No user found with ID {userId}.");
         return;
     }
 
-    Console.WriteLine($"Success: Found user {appUser.Email}.");
-
     if (selectedDay != null && !string.IsNullOrEmpty(selectedTimeSlot))
     {
-        var appointmentDateTime = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number, 
-                                                int.Parse(selectedTimeSlot.Split(':')[0]), 
-                                                int.Parse(selectedTimeSlot.Split(':')[1]), 0);
+        // Save just the temp date/time
+        var appointmentDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
 
-        var appointment = new Appointment
-        {
-            AppointmentDate = appointmentDateTime,
-            PatientId = appUser.Id,
-            DoctorId = "your_doctor_id_here", // Replace with actual doctor ID
-            Description = "Appointment description here" // Optional: Add description
-        };
+        appUser.TempAppointmentDate = appointmentDate;
+        appUser.TempAppointmentTime = selectedTimeSlot;
 
-        DbContext.Appointments.Add(appointment);
-        await DbContext.SaveChangesAsync();
+        await UserManager.UpdateAsync(appUser);
 
-        Console.WriteLine($"Appointment confirmed for {appUser.Email} on {appointment.AppointmentDate}.");
+        Console.WriteLine($"Temp appointment saved for user {appUser.Email} on {appointmentDate.ToShortDateString()} at {selectedTimeSlot}.");
+
+        // Navigate back to the main appointment page
+        NavigationManager.NavigateTo("/appointments");
     }
     else
     {
-        Console.WriteLine("Error: No day or time slot selected.");
+        Console.WriteLine("Error: You must pick a date and time from the schedule first.");
     }
 }
 

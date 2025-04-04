@@ -12,7 +12,6 @@ namespace BlazorHealthApp2025.Data
         public string TempDoctorName { get; set; } = string.Empty;
         public ICollection<Appointment>? Appointments { get; set; }
 
-        // New Property: Confirmation Status
         public bool ConfirmedByDoctor { get; set; } = false;
     }
 

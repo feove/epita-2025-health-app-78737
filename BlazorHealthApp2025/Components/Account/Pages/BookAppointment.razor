@@ -9,6 +9,7 @@
 @using Microsoft.AspNetCore.Identity
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
 @rendermode InteractiveServer
 
 <PageTitle>Book Appointment</PageTitle>
@@ -39,7 +40,7 @@
                 {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>@doctor.UserName</span>
-                        <button class="btn @((doctor.Id == selectedDoctorId) ? "btn-success" : "btn-outline-primary")" @onclick="() => ToggleDoctorSelection(doctor)">
+                        <button class="btn @((doctor.Id == selectedDoctorId) ? "btn-success" : "btn-outline-primary")" @onclick="@(() => ToggleDoctorSelection(doctor))">
                             @if (doctor.Id == selectedDoctorId)
                             {
                                 <span>✓ Selected</span>
@@ -62,6 +63,8 @@
     <hr />
 
     <h4>Your Appointments</h4>
+    
+
     @if (appointments?.Any() == true)
     {
         <ul class="list-group">
@@ -100,7 +103,7 @@ else
 
         if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            var userId = user?.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             var appUser = await UserManager.GetUserAsync(user);
             isPatient = appUser != null && await UserManager.IsInRoleAsync(appUser, "Patient");
 
@@ -120,21 +123,48 @@ else
         StateHasChanged(); // Explicitly update the UI
     }
 
-    private void ToggleDoctorSelection(ApplicationUser doctor)
+   private async Task ToggleDoctorSelection(ApplicationUser doctor)
     {
         if (doctor.Id == selectedDoctorId)
         {
-            // Unselect the doctor if the same one is clicked
+            // Unselect the doctor
             selectedDoctorId = string.Empty;
             selectedDoctorName = "None";
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var appUser = await UserManager.FindByIdAsync(userId);
+
+            if (appUser != null)
+            {
+                appUser.TempDoctorId = string.Empty;
+                appUser.TempDoctorName = string.Empty;
+                await UserManager.UpdateAsync(appUser);
+            }
         }
         else
-        {   
+        {
+            // Select the doctor
             selectedDoctorId = doctor.Id;
             selectedDoctorName = doctor.UserName;
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var userId = user?.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            var appUser = await UserManager.FindByIdAsync(userId);
+
+            if (appUser != null)
+            {
+                appUser.TempDoctorId = selectedDoctorId;
+                appUser.TempDoctorName = selectedDoctorName;
+                await UserManager.UpdateAsync(appUser);
+            }
         }
-        StateHasChanged(); // Ensure UI is updated after toggling selection
+
+        StateHasChanged();
     }
+
 
     private void GoToSchedulePage()
     {
@@ -142,38 +172,93 @@ else
         NavigationManager.NavigateTo("/schedule"); 
     }
 
- private async Task SubmitAppointment()
-{
-    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-    var user = authState?.User;
 
-    if (user?.Identity?.IsAuthenticated == true && isPatient)
+    
+    private async Task SubmitAppointment()
     {
-        var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
-        var appUser = await UserManager.FindByIdAsync(userId);
+        
+    
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState?.User;
 
-        if (appUser != null && appUser.TempAppointmentDate.HasValue && !string.IsNullOrEmpty(appUser.TempAppointmentTime))
+        if (user?.Identity?.IsAuthenticated == true && isPatient)
         {
-            if (string.IsNullOrEmpty(selectedDoctorId))
-            {
-                Console.WriteLine("Error: Doctor must be selected.");
-                return;
+                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            
+                var appUser = await UserManager.FindByIdAsync(userId);
+
+
+                //Tmp Check
+
+                if (appUser == null){
+                    Console.WriteLine("appUser is NULL !");
+                    return;
+                }
+
+
+                if (string.IsNullOrEmpty(appUser.TempDoctorId)){
+
+                    Console.WriteLine("appUser.TempDoctorId is NULL !");
+                }
+
+
+                if (appUser != null &&
+                    appUser.TempAppointmentDate.HasValue &&
+                    !string.IsNullOrEmpty(appUser.TempAppointmentTime) &&
+                    !string.IsNullOrEmpty(appUser.TempDoctorId))
+                {
+                    // Parse the time string into a TimeSpan
+                    var timeParts = appUser.TempAppointmentTime.Split(':');
+                    int hour = int.Parse(timeParts[0]);
+                    int minute = int.Parse(timeParts[1]);
+
+                    var appointmentDateTime = new DateTime(
+                        appUser.TempAppointmentDate.Value.Year,
+                        appUser.TempAppointmentDate.Value.Month,
+                        appUser.TempAppointmentDate.Value.Day,
+                        hour,
+                        minute,
+                        0
+                    );
+
+                   var newAppointment = new Appointment
+                    {
+                        PatientId = appUser.Id,
+                        AppointmentDate = appointmentDateTime,
+                        Description = appointment.Description,
+                        DoctorId = appUser.TempDoctorId,
+                        DoctorName = appUser.TempDoctorName,
+                        IsConfirmed = false
+                    };
+
+
+                    DbContext.Appointments.Add(newAppointment);
+
+                    // Optional: Clear temp fields
+                    appUser.TempAppointmentDate = null;
+                    appUser.TempAppointmentTime = string.Empty;
+                    appUser.TempDoctorId = string.Empty;
+                    appUser.TempDoctorName = string.Empty;
+
+                    await DbContext.SaveChangesAsync();
+                    await UserManager.UpdateAsync(appUser);
+
+                    // Reload appointments list
+                    appointments = await DbContext.Appointments
+                        .Where(a => a.PatientId == appUser.Id)
+                        .ToListAsync();
+
+                    // Clear form
+                    appointment = new Appointment();
+                    selectedDoctorId = string.Empty;
+                    selectedDoctorName = "None";
+
+                
+                
+                }else{
+                    Console.WriteLine("Error: Please select a doctor and schedule an appointment time first.");
+                }
             }
-
-            // Store the selected doctor and time in temporary fields
-            appUser.TempDoctorId = selectedDoctorId;
-            appUser.TempDoctorName = selectedDoctorName;
-
-            await UserManager.UpdateAsync(appUser);
-
-            // Go to the schedule page
-            NavigationManager.NavigateTo("/schedule");
-        }
-        else
-        {
-            Console.WriteLine("Error: You must pick a date and time from the schedule first.");
-        }
     }
-}
 
 }
