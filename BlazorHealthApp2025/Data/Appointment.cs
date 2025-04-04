@@ -25,5 +25,9 @@ namespace BlazorHealthApp2025.Data
 
         [Display(Name = "Doctor Name")]
         public string DoctorName { get; set; } = string.Empty;
+
+        // IsConfirmed to track if doctor confirmed the appointment
+        public bool IsConfirmed { get; set; } = false;
     }
+
 }

@@ -17,7 +17,7 @@
 
 @if (isPatient)
 {
-    <EditForm Model="appointment" OnValidSubmit="SubmitAppointment">
+    <EditForm Model="appointment" OnSubmit="SubmitAppointment">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -142,40 +142,38 @@ else
         NavigationManager.NavigateTo("/schedule"); 
     }
 
-    private async Task SubmitAppointment()
+ private async Task SubmitAppointment()
+{
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var user = authState?.User;
+
+    if (user?.Identity?.IsAuthenticated == true && isPatient)
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+        var appUser = await UserManager.FindByIdAsync(userId);
 
-        if (user.Identity != null && user.Identity.IsAuthenticated && isPatient)
+        if (appUser != null && appUser.TempAppointmentDate.HasValue && !string.IsNullOrEmpty(appUser.TempAppointmentTime))
         {
-            var userId = user.FindFirst(c => c.Type == "sub")?.Value;
-            var appUser = await UserManager.FindByIdAsync(userId);
-
-            if (appUser != null && appUser.TempAppointmentDate.HasValue && !string.IsNullOrEmpty(appUser.TempAppointmentTime))
+            if (string.IsNullOrEmpty(selectedDoctorId))
             {
-                appointment.PatientId = userId;
-                appointment.AppointmentDate = appUser.TempAppointmentDate.Value
-                    .Add(TimeSpan.Parse(appUser.TempAppointmentTime));
-                appointment.DoctorId = selectedDoctorId;
-                appointment.DoctorName = selectedDoctorName;
-
-                // Save the appointment to the database
-                DbContext.Appointments.Add(appointment);
-                await DbContext.SaveChangesAsync();
-                appointments.Add(appointment);
-
-                // Clear temp appointment data
-                appUser.TempAppointmentDate = null;
-                appUser.TempAppointmentTime = string.Empty;
-                await UserManager.UpdateAsync(appUser);
-
-                // Reset the form
-                appointment = new Appointment();
-                selectedDoctorId = string.Empty;
-                selectedDoctorName = "None";
+                Console.WriteLine("Error: Doctor must be selected.");
+                return;
             }
+
+            // Store the selected doctor and time in temporary fields
+            appUser.TempDoctorId = selectedDoctorId;
+            appUser.TempDoctorName = selectedDoctorName;
+
+            await UserManager.UpdateAsync(appUser);
+
+            // Go to the schedule page
+            NavigationManager.NavigateTo("/schedule");
+        }
+        else
+        {
+            Console.WriteLine("Error: You must pick a date and time from the schedule first.");
         }
     }
+}
 
 }

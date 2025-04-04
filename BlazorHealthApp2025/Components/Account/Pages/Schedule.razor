@@ -4,6 +4,7 @@
 @using BlazorHealthApp2025.Services
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
 @inject UserManager<ApplicationUser> UserManager
 @inject ApplicationDbContext DbContext
 @inject IHttpContextAccessor HttpContextAccessor
@@ -40,7 +41,7 @@
                     <div class="busy-indicator">Busy</div>
                 }
             </div>
-            @if (!day.IsAvailable) //And role of user is admin
+            @if (!day.IsAvailable && isAdmin) 
             {
                 <button class="btn btn-danger btn-sm" @onclick="() => DeleteAppointment(day.Number)">Delete</button>
             }
@@ -63,7 +64,11 @@
         </div>
     }
 
-    
+    @if (!string.IsNullOrEmpty(selectedTimeSlot))
+    {
+        <p>Selected Time: @selectedTimeSlot</p>
+    }
+
 </div>
 
 @code {
@@ -77,37 +82,43 @@
 
     private List<string> availableTimeSlots = new();
 
+      private bool isAdmin = false;
+
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        
+        isAdmin = user.IsInRole("Admin"); 
+
         await GenerateCalendar();
     }
 
+    private async Task GenerateCalendar()
+{
+    days.Clear();
+    int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
 
-   private async Task GenerateCalendar()
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var user = authState.User;
+    var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+
+    var appointments = await DbContext.Appointments
+        .Where(a => a.AppointmentDate.Month == currentDate.Month && a.AppointmentDate.Year == currentDate.Year)
+        .ToListAsync();
+
+    var calendarEntries = await DbContext.CalendarEntries
+        .Where(c => c.Date.Month == currentDate.Month && c.Date.Year == currentDate.Year)
+        .ToListAsync();
+
+    for (int i = 1; i <= daysInMonth; i++)
     {
-        days.Clear();
-        int daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-        Console.WriteLine($"Generating calendar for {currentMonth} {currentYear}, days in month: {daysInMonth}");
+        bool isBusy = appointments.Any(a => a.AppointmentDate.Day == i && a.IsConfirmed) ||
+                      calendarEntries.Any(c => c.Date.Day == i);
 
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
-
-        // This line is causing the error when connection is already disposed
-        var appointments = await DbContext.Appointments
-            .Where(a => a.AppointmentDate.Month == currentDate.Month && a.AppointmentDate.Year == currentDate.Year)
-            .ToListAsync();
-
-        for (int i = 1; i <= daysInMonth; i++)
-        {
-            bool isBusy = appointments.Any(a => a.AppointmentDate.Day == i);
-            days.Add(new Day { Number = i, IsAvailable = !isBusy, IsSelected = false });
-        }
-
-        Console.WriteLine($"Generated {days.Count} days.");
+        days.Add(new Day { Number = i, IsAvailable = !isBusy, IsSelected = false });
     }
-
-
+}
 
 
   private async Task NextMonth()
@@ -123,7 +134,9 @@
     }
 
     private void SelectDay(Day day)
-    {
+    {   
+
+
         selectedDay = day;
         availableTimeSlots = GenerateAvailableTimeSlots(day.Number);
         selectedTimeSlot = availableTimeSlots.FirstOrDefault() ?? string.Empty;
@@ -131,6 +144,12 @@
         // Mark other days as unselected
         foreach (var d in days) d.IsSelected = false;
         day.IsSelected = true;
+
+        if (selectedDay == null)
+        {
+            Console.WriteLine("Error: No day selected.");
+            return;
+        }
     }
 
     private List<string> GenerateAvailableTimeSlots(int day)
@@ -148,37 +167,7 @@
     }
 
 
-   private async Task ConfirmAppointment()
-{
-    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-    var user = authState.User;
 
-    if (user.Identity != null && user.Identity.IsAuthenticated)
-    {
-        var userId = user.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
-        var appUser = await UserManager.FindByIdAsync(userId);
-
-        if (appUser != null)
-        {
-            // Confirm and set appointment
-            var newAppointment = new Appointment
-            {
-                PatientId = appUser.Id,
-                AppointmentDate = new DateTime(currentYear, currentDate.Month, selectedDay.Number),
-                Description = "Your appointment description here", // Make sure to set a description
-                DoctorId = "your-doctor-id", // Add logic for assigning doctor
-                DoctorName = "Doctor Name" // You can pull this from your database or user profile
-            };
-
-            DbContext.Appointments.Add(newAppointment);
-            await DbContext.SaveChangesAsync();
-        }
-    }
-
-    NavigationManager.NavigateTo("/appointments");
-}
-
-    
     private async Task DeleteAppointment(int dayNumber)
     {
         var appointment = await DbContext.Appointments
@@ -187,9 +176,95 @@
         if (appointment != null)
         {
             await adminService.DeleteAppointmentAsync(appointment.Id);
-            GenerateCalendar();
+            await GenerateCalendar();
         }
     }
+   
+    private async Task ConfirmAppointment()
+{
+    // Get the current authentication state to access the user's information
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var user = authState.User;
+
+    // Check if the user is authenticated
+    if (user.Identity == null || !user.Identity.IsAuthenticated)
+    {
+        Console.WriteLine("User is not authenticated.");
+        return;
+    }
+
+    // Log the user's claims for debugging purposes
+    foreach (var claim in user.Claims)
+    {
+        Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
+    }
+
+    // Retrieve the user's ID from claims
+    string? userId = null;
+
+    // First, try to get the NameIdentifier claim (preferred claim for user ID)
+    var claimNameIdentifier = user.FindFirst(ClaimTypes.NameIdentifier);
+    if (claimNameIdentifier != null)
+    {
+        userId = claimNameIdentifier.Value;
+    }
+    else
+    {
+        // If the NameIdentifier claim is not found, try "sub" or "nameidentifier" claims
+        var claimAlt = user.FindFirst(c => c.Type == "sub")
+                       ?? user.FindFirst(c => c.Type == "nameidentifier");
+        if (claimAlt != null)
+        {
+            userId = claimAlt.Value;
+        }
+    }
+
+    // Log the retrieved user ID
+    Console.WriteLine($"Retrieved userId: {userId}");
+
+    // Check if userId is null or empty, and handle the error if necessary
+    if (string.IsNullOrEmpty(userId))
+    {
+        Console.WriteLine("Error: User ID is null or empty.");
+        return;
+    }
+
+    // Retrieve the user from the database using the userId
+    var appUser = await UserManager.FindByIdAsync(userId);
+
+    // Check if the user was found in the database
+    if (appUser == null)
+    {
+        Console.WriteLine($"Error: No user found with ID {userId}.");
+        return;
+    }
+
+    Console.WriteLine($"Success: Found user {appUser.Email}.");
+
+    if (selectedDay != null && !string.IsNullOrEmpty(selectedTimeSlot))
+    {
+        var appointmentDateTime = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number, 
+                                                int.Parse(selectedTimeSlot.Split(':')[0]), 
+                                                int.Parse(selectedTimeSlot.Split(':')[1]), 0);
+
+        var appointment = new Appointment
+        {
+            AppointmentDate = appointmentDateTime,
+            PatientId = appUser.Id,
+            DoctorId = "your_doctor_id_here", // Replace with actual doctor ID
+            Description = "Appointment description here" // Optional: Add description
+        };
+
+        DbContext.Appointments.Add(appointment);
+        await DbContext.SaveChangesAsync();
+
+        Console.WriteLine($"Appointment confirmed for {appUser.Email} on {appointment.AppointmentDate}.");
+    }
+    else
+    {
+        Console.WriteLine("Error: No day or time slot selected.");
+    }
+}
 
     public class Day
     {

@@ -8,6 +8,8 @@ namespace BlazorHealthApp2025.Data
         public DateTime? TempAppointmentDate { get; set; }
         public string TempAppointmentTime { get; set; } = string.Empty;
 
+         public string TempDoctorId { get; set; } = string.Empty;
+        public string TempDoctorName { get; set; } = string.Empty;
         public ICollection<Appointment>? Appointments { get; set; }
 
         // New Property: Confirmation Status
