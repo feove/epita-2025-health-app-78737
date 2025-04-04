@@ -18,13 +18,14 @@
 
 @if (isPatient)
 {
-    <EditForm Model="appointment" OnSubmit="SubmitAppointment">
+    <EditForm Model="appointment" OnValidSubmit="SubmitAppointment">
+
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <!-- Removed Appointment Date Input, replaced with Go Schedule Button -->
         <div class="mb-3">
-            <button class="btn btn-info" @onclick="GoToSchedulePage">Go to Schedule</button>
+            <button type="button" class="btn btn-info" @onclick="GoToSchedulePage">Go to Schedule</button>
         </div>
 
         <div class="form-floating mb-3">
@@ -57,34 +58,55 @@
 
         <p>Selected Doctor: @selectedDoctorName</p>
 
-        <button type="submit" class="btn btn-primary" disabled="@(string.IsNullOrEmpty(selectedDoctorId) || appointment.Description == string.Empty)">Book Appointment</button>
-    </EditForm>
+        <button type="submit" class="btn btn-primary" disabled="@isSubmitDisabled">Book Appointment</button>
+
+        </EditForm>
 
     <hr />
 
     <h4>Your Appointments</h4>
-    
 
-    @if (appointments?.Any() == true)
-    {
-        <ul class="list-group">
-            @foreach (var appt in appointments)
-            {
-                <li class="list-group-item">
-                    <strong>@appt.AppointmentDate.ToString("f"):</strong> @appt.Description - Doctor: @appt.DoctorName
-                </li>
-            }
-        </ul>
+@if (appointments?.Any() == true)
+{
+    <ul class="list-group">
+        @foreach (var appt in appointments.OrderBy(a => a.AppointmentDate))
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@appt.AppointmentDate.ToString("f"):</strong>
+                    <br />
+                    @appt.Description
+                    <br />
+                    <span>Doctor: @appt.DoctorName</span>
+                    <br />
+                    @if (appt.IsConfirmed)
+                    {
+                        <span class="badge bg-success">Confirmed</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                </div>
+                
+                @if (!appt.IsConfirmed)
+                {
+                    <button class="btn btn-danger btn-sm" @onclick="@(() => CancelAppointment(appt.Id))">Cancel</button>
+                }
+            </li>
+        }
+    </ul>
     }
     else
     {
         <p>No appointments booked yet.</p>
     }
-}
-else
-{
-    <p>You do not have access to book an appointment. Please contact support.</p>
-}
+
+    }
+    else
+    {
+        <p>You do not have access to book an appointment. Please contact support.</p>
+    }
 
 @code {
     private Appointment appointment = new();
@@ -115,6 +137,46 @@ else
             }
         }
     }
+
+    private async Task CancelAppointment(int appointmentId)
+    {
+        var appt = await DbContext.Appointments.FindAsync(appointmentId);
+
+        if (appt != null && !appt.IsConfirmed)
+        {
+            DbContext.Appointments.Remove(appt);
+            await DbContext.SaveChangesAsync();
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
+            appointments = await DbContext.Appointments
+                .Where(a => a.PatientId == userId)
+                .ToListAsync();
+        }
+    }
+
+    private bool isSubmitDisabled =>
+    string.IsNullOrEmpty(selectedDoctorId)
+    || string.IsNullOrWhiteSpace(appointment.Description)
+    || !IsAppointmentTimeSelected();
+
+private bool IsAppointmentTimeSelected()
+{
+    // Check in user Temp fields
+    var authStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
+    authStateTask.Wait(); // not great but okay in computed property
+    var user = authStateTask.Result.User;
+    var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+    var appUserTask = UserManager.FindByIdAsync(userId);
+    appUserTask.Wait();
+    var appUser = appUserTask.Result;
+
+    return appUser != null &&
+           appUser.TempAppointmentDate.HasValue &&
+           !string.IsNullOrEmpty(appUser.TempAppointmentTime);
+}
+
 
     private void SearchDoctors(ChangeEventArgs e)
     {
@@ -151,7 +213,7 @@ else
 
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
-            var userId = user?.FindFirst(c => c.Type == "sub")?.Value ?? string.Empty;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             var appUser = await UserManager.FindByIdAsync(userId);
 
             if (appUser != null)
@@ -171,7 +233,6 @@ else
        
         NavigationManager.NavigateTo("/schedule"); 
     }
-
 
     
     private async Task SubmitAppointment()
