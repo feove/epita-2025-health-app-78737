@@ -590,7 +590,7 @@ C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\
 C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\scopedcss\bundle\BlazorHealthApp2025.styles.css
 C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\scopedcss\projectbundle\BlazorHealthApp2025.bundle.scp.css
-C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\i51jq4pexj-gmkgzeo4jn.gz
+C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\i51jq4pexj-ceg2kovoib.gz
 C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\h1w05dajts-t1cqhe9u97.gz
 C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\98pcsso3f1-c2jlpeoesf.gz
 C:\Users\ibore\webApp\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\gbp7cufpc8-sejl45xvog.gz

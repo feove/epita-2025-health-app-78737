@@ -33,15 +33,18 @@
 
         @foreach (var day in days)
         {
-           <div class="calendar-day @(day.IsAvailable ? "available" : "busy") @(day.IsSelected ? "selected" : "")"
+           <div class="calendar-day @(day.IsSelected ? "selected" : "")"
                 @onclick="() => SelectDay(day)">
-                @day.Number
-                @if (!day.IsAvailable)
+            <div class="day-number">@day.Number</div>
+
+            <div class="mini-slot-grid">
+                @foreach (var slot in GenerateAvailableTimeSlots(day.Number))
                 {
-                    <div class="busy-indicator">Busy</div>
+                    bool isBusy = day.BusyTimeSlots.Contains(slot);
+                    <div class="mini-slot @(isBusy ? "mini-busy" : "mini-free")"></div>
                 }
-            </div>
-            
+                </div>
+            </div>  
 
         }
     </div>
@@ -134,10 +137,27 @@
 
     for (int i = 1; i <= daysInMonth; i++)
     {
-        bool isBusy = appointments.Any(a => a.AppointmentDate.Day == i && a.IsConfirmed) ||
-                      calendarEntries.Any(c => c.Date.Day == i);
+        var busySlots = appointments
+            .Where(a => a.AppointmentDate.Day == i && a.IsConfirmed)
+            .Select(a => a.AppointmentDate.ToString("H:mm"))
+            .ToList();
 
-        days.Add(new Day { Number = i, IsAvailable = !isBusy, IsSelected = false });
+        busySlots.AddRange(
+            calendarEntries
+                .Where(c => c.Date.Day == i && c.IsConfirmed)
+                .Select(c => c.Date.ToString("H:mm"))
+        );
+
+        bool isBusy = busySlots.Any();
+
+        days.Add(new Day
+        {
+            Number = i,
+            IsAvailable = !isBusy,
+            IsSelected = false,
+            BusyTimeSlots = busySlots
+        });
+
     }
 }
 
@@ -195,45 +215,46 @@
         }
     }
 
-   private async Task DeleteTimeSlot(string timeSlot)
-{
-    if (selectedDay == null) return;
-
-    var selectedDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
-
-    // Parse the time string into a TimeSpan
-    if (!TimeSpan.TryParse(timeSlot, out var parsedTime))
+    private async Task DeleteTimeSlot(string timeSlot)
     {
-        Console.WriteLine("Invalid time format.");
-        return;
+        if (selectedDay == null) return;
+
+        var selectedDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
+
+        if (!TimeSpan.TryParse(timeSlot, out var parsedTime))
+        {
+            Console.WriteLine("Invalid time format.");
+            return;
+        }
+
+        var appointment = await DbContext.Appointments
+            .FirstOrDefaultAsync(a =>
+                a.AppointmentDate.Date == selectedDate.Date &&
+                a.AppointmentDate.TimeOfDay == parsedTime &&
+                a.IsConfirmed);
+
+        if (appointment != null)
+        {
+            await adminService.DeleteAppointmentAsync(appointment.Id);
+            await GenerateCalendar(); // <--- refresh whole calendar
+            await SelectDay(selectedDay); // <--- also refresh dropdown
+            return;
+        }
+
+        var calendarEntry = await DbContext.CalendarEntries
+            .FirstOrDefaultAsync(c =>
+                c.Date.Date == selectedDate.Date &&
+                c.Date.TimeOfDay == parsedTime &&
+                c.IsConfirmed);
+
+        if (calendarEntry != null)
+        {
+            DbContext.CalendarEntries.Remove(calendarEntry);
+            await DbContext.SaveChangesAsync();
+            await GenerateCalendar(); // <--- same here
+            await SelectDay(selectedDay);
+        }
     }
-
-    var appointment = await DbContext.Appointments
-        .FirstOrDefaultAsync(a =>
-            a.AppointmentDate.Date == selectedDate.Date &&
-            a.AppointmentDate.TimeOfDay == parsedTime &&
-            a.IsConfirmed);
-
-    if (appointment != null)
-    {
-        await adminService.DeleteAppointmentAsync(appointment.Id);
-        await SelectDay(selectedDay); // Refresh
-        return;
-    }
-
-    var calendarEntry = await DbContext.CalendarEntries
-        .FirstOrDefaultAsync(c =>
-            c.Date.Date == selectedDate.Date &&
-            c.Date.TimeOfDay == parsedTime &&
-            c.IsConfirmed);
-
-    if (calendarEntry != null)
-    {
-        DbContext.CalendarEntries.Remove(calendarEntry);
-        await DbContext.SaveChangesAsync();
-        await SelectDay(selectedDay); // Refresh
-    }
-}
 
     private List<string> GenerateAvailableTimeSlots(int day)
     {
@@ -326,5 +347,7 @@
         public int Number { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsSelected { get; set; }
+        public List<string> BusyTimeSlots { get; set; } = new(); 
     }
+
 }

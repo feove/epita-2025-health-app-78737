@@ -61,9 +61,6 @@ h1:focus {
 
 
 
-
-/* Adjusted CSS for Calendar Header Alignment and Spacing */
-/* Adjusted CSS for Calendar Header Alignment and Spacing */
 .calendar-container {
     max-width: 800px;
     margin: 20px auto;
@@ -200,4 +197,30 @@ h1:focus {
     align-items: center;
     justify-content: space-between;
     max-width: 250px;
+}
+.day-number {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.mini-slot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 blocks per row */
+    gap: 3px;
+    margin-top: 5px;
+}
+
+.mini-slot {
+    width: 100%;
+    height: 10px;
+    border-radius: 2px;
+    background-color: #e0e0e0;
+}
+
+.mini-busy {
+    background-color: orange;
+}
+
+.mini-free {
+    background-color: #c8e6c9;
 }
