@@ -187,30 +187,33 @@
     }
 }
 
-private void ShowPatientSelector(string timeSlot)
-{
-    timeSlotToBookForPatient = timeSlot;
-    showPatientSelector = true;
-    selectedPatientId = string.Empty;
-}
+    private void ShowPatientSelector(string timeSlot)
+    {
+        timeSlotToBookForPatient = timeSlot;
+        showPatientSelector = true;
+        selectedPatientId = string.Empty;
+    }
 
-private void CancelPatientSelector()
-{
-    timeSlotToBookForPatient = null;
-    showPatientSelector = false;
-    selectedPatientId = string.Empty;
-}
+    private void CancelPatientSelector()
+    {
+        timeSlotToBookForPatient = null;
+        showPatientSelector = false;
+        selectedPatientId = string.Empty;
+    }
 
-private async Task ConfirmPatientBooking()
+    private async Task ConfirmPatientBooking()
 {
+    // Validate input fields
     if (string.IsNullOrEmpty(selectedPatientId) || timeSlotToBookForPatient == null || selectedDay == null)
     {
         Console.WriteLine("Missing required info for booking.");
         return;
     }
 
+    // Set the appointment date (combine current date with the selected day)
     var appointmentDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
 
+    // Find the patient using the selected patient ID
     var patient = await UserManager.FindByIdAsync(selectedPatientId);
     if (patient == null)
     {
@@ -218,22 +221,48 @@ private async Task ConfirmPatientBooking()
         return;
     }
 
-    // Save temp booking
-    patient.TempAppointmentDate = appointmentDate;
-    patient.TempAppointmentTime = timeSlotToBookForPatient;
+    // Find the current admin user making the booking
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var adminUser = authState?.User;
 
-    await UserManager.UpdateAsync(patient);
+    if (adminUser?.Identity?.IsAuthenticated == true)
+    {
+        var adminUserId = adminUser.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
-    // Cleanup local state
-    showPatientSelector = false;
-    timeSlotToBookForPatient = null;
-    selectedPatientId = string.Empty;
+        var admin = await UserManager.FindByIdAsync(adminUserId);
 
-    // Redirect to /appointments page
-    NavigationManager.NavigateTo("/appointments");
+        if (admin != null)
+        {
+            // Admin is making the booking - save the Admin's ID as the TempPatientId for the patient
+            admin.TempPatientId = patient.Id;
+
+            // Save the appointment date and time temporarily
+            admin.TempAppointmentDate = appointmentDate;
+            admin.TempAppointmentTime = timeSlotToBookForPatient;
+
+            // Update the patient with the temp appointment info
+            await UserManager.UpdateAsync(admin);
+
+            Console.WriteLine("Booking confirmed for patient.");
+
+            // Cleanup local state
+            showPatientSelector = false;
+            timeSlotToBookForPatient = null;
+            selectedPatientId = string.Empty;
+
+            // Redirect to /appointments page
+            NavigationManager.NavigateTo("/appointments");
+        }
+        else
+        {
+            Console.WriteLine("Admin user not found.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Admin user is not authenticated.");
+    }
 }
-
-
 
   private async Task NextMonth()
     {

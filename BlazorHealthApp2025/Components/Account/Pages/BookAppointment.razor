@@ -23,7 +23,7 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <!-- Removed Appointment Date Input, replaced with Go Schedule Button -->
+      
         <div class="mb-3">
             <button type="button" class="btn btn-info" @onclick="GoToSchedulePage">Go to Schedule</button>
         </div>
@@ -66,8 +66,7 @@
 
     <h4>Your Appointments</h4>
 
-    @if (appointments?.Any() == true)
-    {
+    @if (appointments?.Any() == true && isPatient){
     <ul class="list-group">
         @foreach (var appt in appointments.OrderBy(a => a.AppointmentDate))
         {
@@ -236,90 +235,84 @@
 
     
     private async Task SubmitAppointment()
+{
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    var user = authState?.User;
+
+    if (user?.Identity?.IsAuthenticated == true)
     {
-        
-    
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState?.User;
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
-        if (user?.Identity?.IsAuthenticated == true )
+        var appUser = await UserManager.FindByIdAsync(userId);
+
+        // Check if appUser is null
+        if (appUser == null)
         {
-                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-            
-                var appUser = await UserManager.FindByIdAsync(userId);
+            Console.WriteLine("appUser is NULL !");
+            return;
+        }
 
+        // Make sure the admin fields are properly set
+        if (appUser != null &&
+            appUser.TempAppointmentDate.HasValue &&
+            !string.IsNullOrEmpty(appUser.TempAppointmentTime) &&
+            !string.IsNullOrEmpty(appUser.TempDoctorId))
+        {
+            // If Admin, use TempPatientId for creating appointment
+            string patientId = appUser.Role == "Admin" ? appUser.TempPatientId : appUser.Id;
 
-                //Tmp Check
+            // Parse the time string into a TimeSpan
+            var timeParts = appUser.TempAppointmentTime.Split(':');
+            int hour = int.Parse(timeParts[0]);
+            int minute = int.Parse(timeParts[1]);
 
-                if (appUser == null){
-                    Console.WriteLine("appUser is NULL !");
-                    return;
-                }
+            var appointmentDateTime = new DateTime(
+                appUser.TempAppointmentDate.Value.Year,
+                appUser.TempAppointmentDate.Value.Month,
+                appUser.TempAppointmentDate.Value.Day,
+                hour,
+                minute,
+                0
+            );
 
+            var newAppointment = new Appointment
+            {
+                PatientId = patientId,  // Use the correct Patient ID
+                AppointmentDate = appointmentDateTime,
+                Description = appointment.Description,
+                DoctorId = appUser.TempDoctorId,
+                DoctorName = appUser.TempDoctorName,
+                IsConfirmed = !isPatient 
+            };
 
-                if (string.IsNullOrEmpty(appUser.TempDoctorId)){
+            // Add the appointment to the database
+            DbContext.Appointments.Add(newAppointment);
 
-                    Console.WriteLine("appUser.TempDoctorId is NULL !");
-                }
+            // Optional: Clear temp fields after appointment submission
+            appUser.TempAppointmentDate = null;
+            appUser.TempAppointmentTime = string.Empty;
+            appUser.TempDoctorId = string.Empty;
+            appUser.TempDoctorName = string.Empty;
+            appUser.TempPatientId = string.Empty; // Clear TempPatientId as well
 
+            await DbContext.SaveChangesAsync();
+            await UserManager.UpdateAsync(appUser);
 
-                if (appUser != null &&
-                    appUser.TempAppointmentDate.HasValue &&
-                    !string.IsNullOrEmpty(appUser.TempAppointmentTime) &&
-                    !string.IsNullOrEmpty(appUser.TempDoctorId))
-                {
-                    // Parse the time string into a TimeSpan
-                    var timeParts = appUser.TempAppointmentTime.Split(':');
-                    int hour = int.Parse(timeParts[0]);
-                    int minute = int.Parse(timeParts[1]);
+            // Reload appointments for the user (patient or admin)
+            appointments = await DbContext.Appointments
+                .Where(a => a.PatientId == patientId)  // Ensure we're getting the right appointments
+                .ToListAsync();
 
-                    var appointmentDateTime = new DateTime(
-                        appUser.TempAppointmentDate.Value.Year,
-                        appUser.TempAppointmentDate.Value.Month,
-                        appUser.TempAppointmentDate.Value.Day,
-                        hour,
-                        minute,
-                        0
-                    );
-
-                   var newAppointment = new Appointment
-                    {
-                        PatientId = appUser.Id,
-                        AppointmentDate = appointmentDateTime,
-                        Description = appointment.Description,
-                        DoctorId = appUser.TempDoctorId,
-                        DoctorName = appUser.TempDoctorName,
-                        IsConfirmed = !isPatient
-                    };
-
-
-                    DbContext.Appointments.Add(newAppointment);
-
-                    // Optional: Clear temp fields
-                    appUser.TempAppointmentDate = null;
-                    appUser.TempAppointmentTime = string.Empty;
-                    appUser.TempDoctorId = string.Empty;
-                    appUser.TempDoctorName = string.Empty;
-
-                    await DbContext.SaveChangesAsync();
-                    await UserManager.UpdateAsync(appUser);
-
-                    // Reload appointments list
-                    appointments = await DbContext.Appointments
-                        .Where(a => a.PatientId == appUser.Id)
-                        .ToListAsync();
-
-                    // Clear form
-                    appointment = new Appointment();
-                    selectedDoctorId = string.Empty;
-                    selectedDoctorName = "None";
-
-                
-                
-                }else{
-                    Console.WriteLine("Error: Please select a doctor and schedule an appointment time first.");
-                }
-            }
+            // Reset the form
+            appointment = new Appointment();
+            selectedDoctorId = string.Empty;
+            selectedDoctorName = "None";
+        }
+        else
+        {
+            Console.WriteLine("Error: Please select a doctor and schedule an appointment time first.");
+        }
     }
+}
 
 }
