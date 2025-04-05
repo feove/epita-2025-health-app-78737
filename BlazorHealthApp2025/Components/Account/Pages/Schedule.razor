@@ -62,14 +62,27 @@
                             </option>
                         }
                     </select>
-
                 </div>
                 <button class="confirm-btn" @onclick="ConfirmAppointment">Confirm</button>
             }
-            else if (!selectedDay.IsAvailable)
+            else
             {
-                <button class="btn btn-danger btn-sm mt-2" @onclick="() => DeleteAppointment(selectedDay.Number)">Delete Appointment</button>
+                <div class="admin-time-slot-list">
+                    @foreach (var timeSlot in availableTimeSlots)
+                    {
+                        var isBusy = busyTimeSlots.Contains(timeSlot);
+
+                        <div class="admin-time-slot-entry">
+                            <span style="@(isBusy ? "color: orange;" : "")">@timeSlot</span>
+                            @if (isBusy)
+                            {
+                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteTimeSlot(timeSlot)">Delete</button>
+                            }
+                        </div>
+                    }
+                </div>
             }
+
 
         </div>
     }
@@ -99,6 +112,8 @@
 
         await GenerateCalendar();
     }
+
+    
 
     private async Task GenerateCalendar()
 {
@@ -139,7 +154,7 @@
         await GenerateCalendar();
     }
 
-    private async void SelectDay(Day day)
+    private async Task SelectDay(Day day)
     {
         selectedDay = day;
         selectedTimeSlot = string.Empty;
@@ -180,13 +195,52 @@
         }
     }
 
+   private async Task DeleteTimeSlot(string timeSlot)
+{
+    if (selectedDay == null) return;
+
+    var selectedDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
+
+    // Parse the time string into a TimeSpan
+    if (!TimeSpan.TryParse(timeSlot, out var parsedTime))
+    {
+        Console.WriteLine("Invalid time format.");
+        return;
+    }
+
+    var appointment = await DbContext.Appointments
+        .FirstOrDefaultAsync(a =>
+            a.AppointmentDate.Date == selectedDate.Date &&
+            a.AppointmentDate.TimeOfDay == parsedTime &&
+            a.IsConfirmed);
+
+    if (appointment != null)
+    {
+        await adminService.DeleteAppointmentAsync(appointment.Id);
+        await SelectDay(selectedDay); // Refresh
+        return;
+    }
+
+    var calendarEntry = await DbContext.CalendarEntries
+        .FirstOrDefaultAsync(c =>
+            c.Date.Date == selectedDate.Date &&
+            c.Date.TimeOfDay == parsedTime &&
+            c.IsConfirmed);
+
+    if (calendarEntry != null)
+    {
+        DbContext.CalendarEntries.Remove(calendarEntry);
+        await DbContext.SaveChangesAsync();
+        await SelectDay(selectedDay); // Refresh
+    }
+}
 
     private List<string> GenerateAvailableTimeSlots(int day)
     {
         List<string> slots = new();
         DateTime baseDate = new DateTime(currentDate.Year, currentDate.Month, day);
 
-        for (int i = 8; i < 18; i++) // 8 AM to 5 PM (18:00)
+        for (int i = 8; i < 18; i++) 
         {
             slots.Add($"{i}:00");
             slots.Add($"{i}:30");
