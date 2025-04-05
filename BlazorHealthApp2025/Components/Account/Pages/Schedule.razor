@@ -71,19 +71,41 @@
             else
             {
                 <div class="admin-time-slot-list">
-                    @foreach (var timeSlot in availableTimeSlots)
-                    {
-                        var isBusy = busyTimeSlots.Contains(timeSlot);
+                @foreach (var timeSlot in availableTimeSlots)
+                {
+                    var isBusy = busyTimeSlots.Contains(timeSlot);
 
-                        <div class="admin-time-slot-entry">
-                            <span style="@(isBusy ? "color: orange;" : "")">@timeSlot</span>
-                            @if (isBusy)
+                    <div class="admin-time-slot-entry">
+                        <span style="@(isBusy ? "color: orange;" : "")">@timeSlot</span>
+
+                        @if (isBusy)
+                        {
+                            <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteTimeSlot(timeSlot)">Delete</button>
+                        }
+                        <button class="btn btn-sm btn-success ms-2" @onclick="() => ShowPatientSelector(timeSlot)">Add</button>
+                    </div>
+                }
+
+                @if (showPatientSelector && timeSlotToBookForPatient != null)
+                {
+                    <div class="mt-2">
+                        <label>Select Patient:</label>
+                        <select @bind="selectedPatientId" class="form-select mb-2">
+                            <option value="">-- Select Patient --</option>
+                            @foreach (var patient in patientList)
                             {
-                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteTimeSlot(timeSlot)">Delete</button>
+                                <option value="@patient.Id">@patient.Email</option>
                             }
+                        </select>
+
+                        <div>
+                            <button class="btn btn-primary me-2" @onclick="ConfirmPatientBooking">Confirm</button>
+                            <button class="btn btn-secondary" @onclick="CancelPatientSelector">Cancel</button>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
+            </div>
+
             }
 
 
@@ -101,10 +123,12 @@
     private Day? selectedDay = null;
     private string selectedTimeSlot = string.Empty;
     private List<string> busyTimeSlots = new();
-
     private List<string> availableTimeSlots = new();
-
-      private bool isAdmin = false;
+    private bool showPatientSelector = false;
+    private string selectedPatientId = string.Empty;
+    private string? timeSlotToBookForPatient = null;
+    private List<ApplicationUser> patientList = new();
+    private bool isAdmin = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,6 +136,8 @@
         var user = authState.User;
         
         isAdmin = user.IsInRole("Admin"); 
+
+        patientList = (await UserManager.GetUsersInRoleAsync("Patient")).ToList();
 
         await GenerateCalendar();
     }
@@ -160,6 +186,53 @@
 
     }
 }
+
+private void ShowPatientSelector(string timeSlot)
+{
+    timeSlotToBookForPatient = timeSlot;
+    showPatientSelector = true;
+    selectedPatientId = string.Empty;
+}
+
+private void CancelPatientSelector()
+{
+    timeSlotToBookForPatient = null;
+    showPatientSelector = false;
+    selectedPatientId = string.Empty;
+}
+
+private async Task ConfirmPatientBooking()
+{
+    if (string.IsNullOrEmpty(selectedPatientId) || timeSlotToBookForPatient == null || selectedDay == null)
+    {
+        Console.WriteLine("Missing required info for booking.");
+        return;
+    }
+
+    var appointmentDate = new DateTime(currentDate.Year, currentDate.Month, selectedDay.Number);
+
+    var patient = await UserManager.FindByIdAsync(selectedPatientId);
+    if (patient == null)
+    {
+        Console.WriteLine("Patient not found.");
+        return;
+    }
+
+    // Save temp booking
+    patient.TempAppointmentDate = appointmentDate;
+    patient.TempAppointmentTime = timeSlotToBookForPatient;
+
+    await UserManager.UpdateAsync(patient);
+
+    // Cleanup local state
+    showPatientSelector = false;
+    timeSlotToBookForPatient = null;
+    selectedPatientId = string.Empty;
+
+    // Redirect to /appointments page
+    NavigationManager.NavigateTo("/appointments");
+}
+
 
 
   private async Task NextMonth()

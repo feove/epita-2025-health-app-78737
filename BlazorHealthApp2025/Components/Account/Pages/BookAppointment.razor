@@ -1,5 +1,5 @@
 @page "/appointments"
-@attribute [Authorize(Roles = "Patient")]
+
 @using Microsoft.AspNetCore.Authorization
 @using BlazorHealthApp2025.Data
 @inject NavigationManager NavigationManager
@@ -16,7 +16,7 @@
 
 <h3>Book an Appointment</h3>
 
-@if (isPatient)
+@if (isPatient || !isPatient)
 {
     <EditForm Model="appointment" OnValidSubmit="SubmitAppointment">
 
@@ -66,8 +66,8 @@
 
     <h4>Your Appointments</h4>
 
-@if (appointments?.Any() == true)
-{
+    @if (appointments?.Any() == true)
+    {
     <ul class="list-group">
         @foreach (var appt in appointments.OrderBy(a => a.AppointmentDate))
         {
@@ -108,7 +108,7 @@
         <p>You do not have access to book an appointment. Please contact support.</p>
     }
 
-@code {
+    @code {
     private Appointment appointment = new();
     private List<Appointment> appointments = new();
     private List<ApplicationUser> doctors = new();
@@ -129,7 +129,7 @@
             var appUser = await UserManager.GetUserAsync(user);
             isPatient = appUser != null && await UserManager.IsInRoleAsync(appUser, "Patient");
 
-            if (isPatient)
+            if (isPatient || !isPatient)
             {
                 appointments = await DbContext.Appointments.Where(a => a.PatientId == userId).ToListAsync();
                 doctors = (await UserManager.GetUsersInRoleAsync("Doctor")).ToList();
@@ -161,8 +161,8 @@
     || string.IsNullOrWhiteSpace(appointment.Description)
     || !IsAppointmentTimeSelected();
 
-private bool IsAppointmentTimeSelected()
-{
+    private bool IsAppointmentTimeSelected()
+    {
     // Check in user Temp fields
     var authStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
     authStateTask.Wait(); // not great but okay in computed property
@@ -175,7 +175,7 @@ private bool IsAppointmentTimeSelected()
     return appUser != null &&
            appUser.TempAppointmentDate.HasValue &&
            !string.IsNullOrEmpty(appUser.TempAppointmentTime);
-}
+    }
 
 
     private void SearchDoctors(ChangeEventArgs e)
@@ -242,7 +242,7 @@ private bool IsAppointmentTimeSelected()
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState?.User;
 
-        if (user?.Identity?.IsAuthenticated == true && isPatient)
+        if (user?.Identity?.IsAuthenticated == true )
         {
                 var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             
@@ -289,7 +289,7 @@ private bool IsAppointmentTimeSelected()
                         Description = appointment.Description,
                         DoctorId = appUser.TempDoctorId,
                         DoctorName = appUser.TempDoctorName,
-                        IsConfirmed = false
+                        IsConfirmed = !isPatient
                     };
 
 
