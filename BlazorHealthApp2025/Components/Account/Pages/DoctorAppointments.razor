@@ -10,18 +10,23 @@
 @using System.Security.Claims
 @rendermode InteractiveServer
 
+
+@page "/doctor-dashboard"
+<PageTitle>Doctor Dashboard</PageTitle>
+
 <h3>Pending Appointments</h3>
 
 @if (appointments?.Any() == true)
 {
-    <ul class="list-group">
+    <ul class="list-group mb-4">
         @foreach (var appt in appointments.OrderBy(a => a.AppointmentDate))
         {
             <li class="list-group-item d-flex justify-content-between align-items-start">
                 <div>
                     <strong>@appt.AppointmentDate.ToString("f")</strong><br />
                     <span>@appt.Description</span><br />
-                    <small class="text-muted">Patient ID: @appt.PatientId</small>
+                    <small class="text-muted">Patient: @patientNames.GetValueOrDefault(appt.PatientId, "Unknown")</small>
+
                 </div>
                 <div class="d-flex flex-column gap-1">
                     <button class="btn btn-success btn-sm" @onclick="@(() => ConfirmAppointment(appt))">Confirm</button>
@@ -36,9 +41,33 @@ else
     <p>No pending appointments assigned to you.</p>
 }
 
+<h3>Confirmed Upcoming Appointments</h3>
+
+@if (confirmedAppointments?.Any() == true)
+{
+    <ul class="list-group">
+        @foreach (var appt in confirmedAppointments.OrderBy(a => a.AppointmentDate))
+        {
+            <li class="list-group-item">
+                <strong>@appt.AppointmentDate.ToString("f")</strong><br />
+                <span>@appt.Description</span><br />
+                <small class="text-muted">Patient: @patientNames.GetValueOrDefault(appt.PatientId, "Unknown")</small>
+
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No confirmed appointments.</p>
+}
+
 @code {
     private List<Appointment> appointments = new();
+    private List<Appointment> confirmedAppointments = new();
     private string currentDoctorId = string.Empty;
+
+    private Dictionary<string, string> patientNames = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,7 +80,37 @@ else
             appointments = await DbContext.Appointments
                 .Where(a => a.DoctorId == currentDoctorId && !a.IsConfirmed)
                 .ToListAsync();
+
+            var allConfirmed = await DbContext.Appointments
+                .Where(a => a.DoctorId == currentDoctorId && a.IsConfirmed)
+                .ToListAsync();
+
+            confirmedAppointments = allConfirmed
+                .Where(a => a.AppointmentDate >= DateTime.Now)
+                .ToList();
+
+            var expiredAppointments = allConfirmed
+                .Where(a => a.AppointmentDate < DateTime.Now)
+                .ToList();
+
+            if (expiredAppointments.Any())
+            {
+                DbContext.Appointments.RemoveRange(expiredAppointments);
+                await DbContext.SaveChangesAsync();
+            }
+
+            // Get patient IDs from both lists
+            var patientIds = appointments.Select(a => a.PatientId)
+                .Concat(confirmedAppointments.Select(a => a.PatientId))
+                .Distinct()
+                .ToList();
+
+            // Fetch full names
+            patientNames = await DbContext.Users
+                .Where(u => patientIds.Contains(u.Id))
+                .ToDictionaryAsync(u => u.Id, u => u.FirstName + " " + u.LastName);
         }
+
     }
 
     private async Task ConfirmAppointment(Appointment appt)
@@ -72,6 +131,7 @@ else
 
         await DbContext.SaveChangesAsync();
         appointments.Remove(appt);
+        confirmedAppointments.Add(appt);
         StateHasChanged();
     }
 
