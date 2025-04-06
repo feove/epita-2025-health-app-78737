@@ -1,6 +1,10 @@
-﻿@implements IDisposable
-
+﻿@using System.Security.Claims
+@using BlazorHealthApp2025.Data
+@using Microsoft.AspNetCore.Identity
+@implements IDisposable
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> UserManager
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -53,19 +57,17 @@
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="/doctor-appointments">
-                        <span class="bi bi-gear-fill-nav-menu" aria-hidden="true"></span>📅 Requests
+                        <span class="bi bi-gear-fill-nav-menu" aria-hidden="true"></span> Requests
                     </NavLink>
                 </div>
             </Authorized>
         </AuthorizeView>
 
-        
-
         <AuthorizeView>
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Profile
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
@@ -98,7 +100,6 @@
 
 @code {
     private string? currentUrl;
-
     protected override void OnInitialized()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);

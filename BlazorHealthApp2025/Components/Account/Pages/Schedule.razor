@@ -14,6 +14,8 @@
 
 @rendermode InteractiveServer
 
+<PageTitle>Schedule</PageTitle>
+
 <div class="calendar-container">
     <h1 class="calendar-header">Select Your Appointment</h1>
 
@@ -94,7 +96,7 @@
                             <option value="">-- Select Patient --</option>
                             @foreach (var patient in patientList)
                             {
-                                <option value="@patient.Id">@patient.Email</option>
+                                <option value="@patient.Id">@patient.FirstName @patient.LastName</option>
                             }
                         </select>
 

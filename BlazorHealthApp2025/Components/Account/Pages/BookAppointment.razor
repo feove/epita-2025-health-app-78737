@@ -40,7 +40,7 @@
                 @foreach (var doctor in filteredDoctors)
                 {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@doctor.UserName</span>
+                        <span>@doctor.FirstName @doctor.LastName</span>
                         <button class="btn @((doctor.Id == selectedDoctorId) ? "btn-success" : "btn-outline-primary")" @onclick="@(() => ToggleDoctorSelection(doctor))">
                             @if (doctor.Id == selectedDoctorId)
                             {
@@ -128,12 +128,10 @@
             var appUser = await UserManager.GetUserAsync(user);
             isPatient = appUser != null && await UserManager.IsInRoleAsync(appUser, "Patient");
 
-            if (isPatient || !isPatient)
-            {
-                appointments = await DbContext.Appointments.Where(a => a.PatientId == userId).ToListAsync();
-                doctors = (await UserManager.GetUsersInRoleAsync("Doctor")).ToList();
-                filteredDoctors = doctors;
-            }
+            appointments = await DbContext.Appointments.Where(a => a.PatientId == userId).ToListAsync();
+            doctors = (await UserManager.GetUsersInRoleAsync("Doctor")).ToList();
+            filteredDoctors = doctors;
+            
         }
     }
 
@@ -208,7 +206,7 @@
         {
             // Select the doctor
             selectedDoctorId = doctor.Id;
-            selectedDoctorName = doctor.UserName;
+            selectedDoctorName = doctor.FirstName + " " + doctor.LastName;
 
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
@@ -235,84 +233,83 @@
 
     
     private async Task SubmitAppointment()
-{
-    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-    var user = authState?.User;
-
-    if (user?.Identity?.IsAuthenticated == true)
     {
-        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState?.User;
 
-        var appUser = await UserManager.FindByIdAsync(userId);
-
-        // Check if appUser is null
-        if (appUser == null)
+        if (user?.Identity?.IsAuthenticated == true)
         {
-            Console.WriteLine("appUser is NULL !");
-            return;
-        }
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var appUser = await UserManager.FindByIdAsync(userId);
 
-        // Make sure the admin fields are properly set
-        if (appUser != null &&
-            appUser.TempAppointmentDate.HasValue &&
-            !string.IsNullOrEmpty(appUser.TempAppointmentTime) &&
-            !string.IsNullOrEmpty(appUser.TempDoctorId))
-        {
-            // If Admin, use TempPatientId for creating appointment
-            string patientId = appUser.Role == "Admin" ? appUser.TempPatientId : appUser.Id;
 
-            // Parse the time string into a TimeSpan
-            var timeParts = appUser.TempAppointmentTime.Split(':');
-            int hour = int.Parse(timeParts[0]);
-            int minute = int.Parse(timeParts[1]);
-
-            var appointmentDateTime = new DateTime(
-                appUser.TempAppointmentDate.Value.Year,
-                appUser.TempAppointmentDate.Value.Month,
-                appUser.TempAppointmentDate.Value.Day,
-                hour,
-                minute,
-                0
-            );
-
-            var newAppointment = new Appointment
+            if (appUser == null)
             {
-                PatientId = patientId,  // Use the correct Patient ID
-                AppointmentDate = appointmentDateTime,
-                Description = appointment.Description,
-                DoctorId = appUser.TempDoctorId,
-                DoctorName = appUser.TempDoctorName,
-                IsConfirmed = !isPatient 
-            };
+                Console.WriteLine("appUser is NULL !");
+                return;
+            }
 
-            // Add the appointment to the database
-            DbContext.Appointments.Add(newAppointment);
+            // Make sure the admin fields are properly set
+            if (appUser != null &&
+                appUser.TempAppointmentDate.HasValue &&
+                !string.IsNullOrEmpty(appUser.TempAppointmentTime) &&
+                !string.IsNullOrEmpty(appUser.TempDoctorId))
+            {
+                // If Admin, use TempPatientId for creating appointment
+                string patientId = isPatient ? appUser.Id : appUser.TempPatientId;
 
-            // Optional: Clear temp fields after appointment submission
-            appUser.TempAppointmentDate = null;
-            appUser.TempAppointmentTime = string.Empty;
-            appUser.TempDoctorId = string.Empty;
-            appUser.TempDoctorName = string.Empty;
-            appUser.TempPatientId = string.Empty; // Clear TempPatientId as well
+                // Parse the time string into a TimeSpan
+                var timeParts = appUser.TempAppointmentTime.Split(':');
+                int hour = int.Parse(timeParts[0]);
+                int minute = int.Parse(timeParts[1]);
 
-            await DbContext.SaveChangesAsync();
-            await UserManager.UpdateAsync(appUser);
+                var appointmentDateTime = new DateTime(
+                    appUser.TempAppointmentDate.Value.Year,
+                    appUser.TempAppointmentDate.Value.Month,
+                    appUser.TempAppointmentDate.Value.Day,
+                    hour,
+                    minute,
+                    0
+                );
 
-            // Reload appointments for the user (patient or admin)
-            appointments = await DbContext.Appointments
-                .Where(a => a.PatientId == patientId)  // Ensure we're getting the right appointments
-                .ToListAsync();
+                var newAppointment = new Appointment
+                {
+                    PatientId = patientId,  
+                    AppointmentDate = appointmentDateTime,
+                    Description = appointment.Description,
+                    DoctorId = appUser.TempDoctorId,
+                    DoctorName = appUser.TempDoctorName,
+                    IsConfirmed = !isPatient 
+                };
 
-            // Reset the form
-            appointment = new Appointment();
-            selectedDoctorId = string.Empty;
-            selectedDoctorName = "None";
-        }
-        else
-        {
-            Console.WriteLine("Error: Please select a doctor and schedule an appointment time first.");
+                // Add the appointment to the database
+                DbContext.Appointments.Add(newAppointment);
+
+                // Optional: Clear temp fields after appointment submission
+                appUser.TempAppointmentDate = null;
+                appUser.TempAppointmentTime = string.Empty;
+                appUser.TempDoctorId = string.Empty;
+                appUser.TempDoctorName = string.Empty;
+                appUser.TempPatientId = string.Empty; // Clear TempPatientId as well
+
+                await UserManager.UpdateAsync(appUser);
+                await DbContext.SaveChangesAsync();
+
+                // Reload appointments for the user (patient or admin)
+                appointments = await DbContext.Appointments
+                    .Where(a => a.PatientId == patientId)  // Ensure we're getting the right appointments
+                    .ToListAsync();
+
+                // Reset the form
+                appointment = new Appointment();
+                selectedDoctorId = string.Empty;
+                selectedDoctorName = "None";
+            }
+            else
+            {
+                Console.WriteLine("Error: Please select a doctor and schedule an appointment time first.");
+            }
         }
     }
-}
 
 }
