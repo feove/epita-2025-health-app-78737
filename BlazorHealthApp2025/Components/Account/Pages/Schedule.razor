@@ -35,10 +35,13 @@
 
         @foreach (var day in days)
         {
-           <div class="calendar-day @(day.IsSelected ? "selected" : "")"
+           <div class="calendar-day 
+                @(day.IsSelected ? "selected" : "")
+                @(day.IsToday ? "today" : "")
+                @(day.IsPastDay ? "past-day" : "")"
                 @onclick="() => SelectDay(day)">
             <div class="day-number">@day.Number</div>
-
+           
             <div class="mini-slot-grid">
                 @foreach (var slot in GenerateAvailableTimeSlots(day.Number))
                 {
@@ -165,6 +168,11 @@
 
     for (int i = 1; i <= daysInMonth; i++)
     {
+            var isToday = new DateTime(currentDate.Year, currentDate.Month, i) == DateTime.Today;
+
+            // Check if the day is in the past
+            var isPastDay = new DateTime(currentDate.Year, currentDate.Month, i) < DateTime.Today;
+
         var busySlots = appointments
             .Where(a => a.AppointmentDate.Day == i && a.IsConfirmed)
             .Select(a => a.AppointmentDate.ToString("H:mm"))
@@ -183,7 +191,9 @@
             Number = i,
             IsAvailable = !isBusy,
             IsSelected = false,
-            BusyTimeSlots = busySlots
+            BusyTimeSlots = busySlots,
+            IsToday = isToday,
+            IsPastDay = isPastDay
         });
 
     }
@@ -452,6 +462,8 @@
         public bool IsAvailable { get; set; }
         public bool IsSelected { get; set; }
         public List<string> BusyTimeSlots { get; set; } = new(); 
+        public bool IsToday { get; set; }
+        public bool IsPastDay { get; set; }
     }
 
 }

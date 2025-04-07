@@ -811,7 +811,6 @@ C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\scopedcss\bundle\BlazorHealthApp2025.styles.css
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\scopedcss\projectbundle\BlazorHealthApp2025.bundle.scp.css
-C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\i51jq4pexj-zg8i2f1til.gz
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\h1w05dajts-t1cqhe9u97.gz
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\98pcsso3f1-c2jlpeoesf.gz
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\gbp7cufpc8-sejl45xvog.gz
@@ -856,8 +855,6 @@ C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\mjhxp5p7y2-h1s4sie4z3.gz
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\gob3kdrwjc-4d85u1mtcx.gz
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\mzve211j8o-0j3bgjxly4.gz
-C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\62g9tozkp3-xqn521guv5.gz
-C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\oupyu6smb4-xqn521guv5.gz
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\staticwebassets.build.endpoints.json
@@ -873,3 +870,7 @@ C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\BlazorHealthApp2025.pdb
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\BlazorHealthApp2025.genruntimeconfig.cache
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\ref\BlazorHealthApp2025.dll
+C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\62g9tozkp3-xqn521guv5.gz
+C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\oupyu6smb4-xqn521guv5.gz
+C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\3079jajkin-njspde4fl1.gz
+C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\compressed\i51jq4pexj-z0fi6qbgjp.gz
