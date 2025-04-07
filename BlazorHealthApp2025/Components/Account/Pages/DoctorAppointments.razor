@@ -120,7 +120,7 @@ else
         var appUser = await UserManager.FindByIdAsync(appt.PatientId);
         var docUser = await UserManager.FindByIdAsync(appt.DoctorId);
         await EmailSender.Execute("Appointement Confirmation", $"Hello {appUser.FirstName},\nyou have a confirmation on your appointement with {docUser.FirstName} {docUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\nIboren Health", appUser.Email);
-        await EmailSender.Execute("Appointement Notice", $"Hello {docUser.FirstName},\nyou have an appointement with {appUser.FirstName}{appUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\nIboren Health", docUser.Email);
+        await EmailSender.Execute("Appointement Notice", $"Hello {docUser.FirstName},\nyou have an appointement with {appUser.FirstName} {appUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\nIboren Health", docUser.Email);
 
         appt.IsConfirmed = true;
         DbContext.Appointments.Update(appt);
@@ -157,9 +157,9 @@ else
         if (appt != null)
         {
             var appUser = await UserManager.FindByIdAsync(appt.PatientId);
-            await EmailSender.Execute("Appointement", $"Hello {appUser.FirstName},\n your submission for an appointement with {appUser.TempDoctorName} on the {appt.AppointmentDate} for {appt.Description} has been declined.\n Iburen Health", appUser.Email);
             var docUser = await UserManager.FindByIdAsync(appt.DoctorId);
-            await EmailSender.Execute("Appointement", $"Hello {docUser.FirstName},\n you no longer have an appointement with {appUser.FirstName}{appUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\n Iburen Health", docUser.Email);
+            await EmailSender.Execute("Appointement", $"Hello {appUser.FirstName},\nyour submission for an appointement with {docUser.FirstName} {docUser.LastName} on the {appt.AppointmentDate} for {appt.Description} has been declined.\nIburen Health", appUser.Email);
+            await EmailSender.Execute("Appointement", $"Hello {docUser.FirstName},\nyou no longer have an appointement with {appUser.FirstName} {appUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\nIburen Health", docUser.Email);
             DbContext.Appointments.Remove(appt);
             await DbContext.SaveChangesAsync();
 

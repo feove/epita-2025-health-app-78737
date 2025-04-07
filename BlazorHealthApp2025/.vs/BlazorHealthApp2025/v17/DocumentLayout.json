@@ -99,8 +99,7 @@
               "ViewState": "AgIAAAYBAAAAAAAAAAAqwBQBAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-04-07T02:11:45.257Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -113,8 +112,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T02:10:59.98Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -127,8 +125,7 @@
               "ViewState": "AgIAAAsAAAAAAAAAAAAAwBkAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T01:59:14.284Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -138,7 +135,7 @@
               "RelativeDocumentMoniker": "Components\\Account\\Pages\\DoctorAppointments.razor",
               "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\DoctorAppointments.razor",
               "RelativeToolTip": "Components\\Account\\Pages\\DoctorAppointments.razor",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAAAIgAAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAJUAAAAAAAAAAAAAAKAAAADtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-04-07T03:41:59.068Z",
               "IsPinned": true,
