@@ -4,13 +4,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-kzr8OgHrgDRA7cVY0p4\u002B0A7m\u002Bif/YIzL2Lft1/K3ySU="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"7437"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022kzr8OgHrgDRA7cVY0p4\u002B0A7m\u002Bif/YIzL2Lft1/K3ySU=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 20:49:31 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"7437"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022kzr8OgHrgDRA7cVY0p4\u002B0A7m\u002Bif/YIzL2Lft1/K3ySU=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 20:50:30 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/app.z0fi6qbgjp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"z0fi6qbgjp"},{"Name":"integrity","Value":"sha256-kzr8OgHrgDRA7cVY0p4\u002B0A7m\u002Bif/YIzL2Lft1/K3ySU="},{"Name":"label","Value":"_content/BlazorHealthApp2025/app.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"7437"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022kzr8OgHrgDRA7cVY0p4\u002B0A7m\u002Bif/YIzL2Lft1/K3ySU=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 20:49:31 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"7437"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022kzr8OgHrgDRA7cVY0p4\u002B0A7m\u002Bif/YIzL2Lft1/K3ySU=\u0022"},{"Name":"Last-Modified","Value":"Mon, 07 Apr 2025 20:50:30 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/BlazorHealthApp2025/BlazorHealthApp2025.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\BlazorHealthApp2025.xqn521guv5.bundle.scp.css'))</AssetFile>
