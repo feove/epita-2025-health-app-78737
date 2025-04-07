@@ -858,8 +858,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>njspde4fl1</Fingerprint>
-      <Integrity>w4Gv+JVpMioTuRh3ED7TrgfneClQouJolt/N2a+84o4=</Integrity>
+      <Fingerprint>9aqmtv9jfs</Fingerprint>
+      <Integrity>kZfmVWCvnI8T1M/bWG0eSWhMWu4AhyZ39EuxL2XMsF4=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\svg\cal.svg'))</OriginalItemSpec>
