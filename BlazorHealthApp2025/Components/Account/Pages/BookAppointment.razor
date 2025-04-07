@@ -7,6 +7,8 @@
 @inject ApplicationDbContext DbContext
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
+@using BlazorHealthApp2025.Services
+@inject EmailSender EmailSender
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @using Microsoft.EntityFrameworkCore
 @using System.Security.Claims
@@ -23,7 +25,7 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-      
+
         <div class="mb-3">
             <button type="button" class="btn btn-info" @onclick="GoToSchedulePage">Go to Schedule</button>
         </div>
@@ -60,54 +62,54 @@
 
         <button type="submit" class="btn btn-primary" disabled="@isSubmitDisabled">Book Appointment</button>
 
-        </EditForm>
+    </EditForm>
 
     <hr />
 
     <h4>Your Appointments</h4>
 
     @if (appointments?.Any() == true && isPatient){
-    <ul class="list-group">
-        @foreach (var appt in appointments.OrderBy(a => a.AppointmentDate))
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>@appt.AppointmentDate.ToString("f"):</strong>
-                    <br />
-                    @appt.Description
-                    <br />
-                    <span>Doctor: @appt.DoctorName</span>
-                    <br />
-                    @if (appt.IsConfirmed)
+        <ul class="list-group">
+            @foreach (var appt in appointments.OrderBy(a => a.AppointmentDate))
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>@appt.AppointmentDate.ToString("f"):</strong>
+                        <br />
+                        @appt.Description
+                        <br />
+                        <span>Doctor: @appt.DoctorName</span>
+                        <br />
+                        @if (appt.IsConfirmed)
+                        {
+                            <span class="badge bg-success">Confirmed</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </div>
+
+                    @if (!appt.IsConfirmed)
                     {
-                        <span class="badge bg-success">Confirmed</span>
+                        <button class="btn btn-danger btn-sm" @onclick="@(() => CancelAppointment(appt.Id))">Cancel</button>
                     }
-                    else
-                    {
-                        <span class="badge bg-warning text-dark">Pending</span>
-                    }
-                </div>
-                
-                @if (!appt.IsConfirmed)
-                {
-                    <button class="btn btn-danger btn-sm" @onclick="@(() => CancelAppointment(appt.Id))">Cancel</button>
-                }
-            </li>
-        }
-    </ul>
+                </li>
+            }
+        </ul>
     }
     else
     {
         <p>No appointments booked yet.</p>
     }
 
-    }
-    else
-    {
-        <p>You do not have access to book an appointment. Please contact support.</p>
-    }
+}
+else
+{
+    <p>You do not have access to book an appointment. Please contact support.</p>
+}
 
-    @code {
+@code {
     private Appointment appointment = new();
     private List<Appointment> appointments = new();
     private List<ApplicationUser> doctors = new();
@@ -131,7 +133,7 @@
             appointments = await DbContext.Appointments.Where(a => a.PatientId == userId).ToListAsync();
             doctors = (await UserManager.GetUsersInRoleAsync("Doctor")).ToList();
             filteredDoctors = doctors;
-            
+
         }
     }
 
@@ -160,18 +162,18 @@
 
     private bool IsAppointmentTimeSelected()
     {
-    // Check in user Temp fields
-    var authStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
-    authStateTask.Wait(); // not great but okay in computed property
-    var user = authStateTask.Result.User;
-    var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-    var appUserTask = UserManager.FindByIdAsync(userId);
-    appUserTask.Wait();
-    var appUser = appUserTask.Result;
+        // Check in user Temp fields
+        var authStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
+        authStateTask.Wait(); // not great but okay in computed property
+        var user = authStateTask.Result.User;
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        var appUserTask = UserManager.FindByIdAsync(userId);
+        appUserTask.Wait();
+        var appUser = appUserTask.Result;
 
-    return appUser != null &&
-           appUser.TempAppointmentDate.HasValue &&
-           !string.IsNullOrEmpty(appUser.TempAppointmentTime);
+        return appUser != null &&
+               appUser.TempAppointmentDate.HasValue &&
+               !string.IsNullOrEmpty(appUser.TempAppointmentTime);
     }
 
 
@@ -182,7 +184,7 @@
         StateHasChanged(); // Explicitly update the UI
     }
 
-   private async Task ToggleDoctorSelection(ApplicationUser doctor)
+    private async Task ToggleDoctorSelection(ApplicationUser doctor)
     {
         if (doctor.Id == selectedDoctorId)
         {
@@ -227,11 +229,11 @@
 
     private void GoToSchedulePage()
     {
-       
+
         NavigationManager.NavigateTo("/schedule"); 
     }
 
-    
+
     private async Task SubmitAppointment()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -272,6 +274,8 @@
                     0
                 );
 
+                await EmailSender.Execute("Appointement Pending", $"Hello {appUser.FirstName},\nyou have submitted a request for an appointement with {appUser.TempDoctorName} on the {appointmentDateTime} for {appointment.Description}.\nIboren Health", appUser.Email);
+
                 var newAppointment = new Appointment
                 {
                     PatientId = patientId,  
@@ -281,6 +285,8 @@
                     DoctorName = appUser.TempDoctorName,
                     IsConfirmed = !isPatient 
                 };
+
+
 
                 // Add the appointment to the database
                 DbContext.Appointments.Add(newAppointment);

@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BlazorHealthApp2025.Services; // Add this line
+using WebPWrecover.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +41,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 // Register AdminService
 builder.Services.AddScoped<AdminService>();
 
+builder.Services.AddScoped<EmailSender>();
+
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+
+
+//builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 var app = builder.Build();
 

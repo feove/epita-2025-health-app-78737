@@ -1,0 +1,250 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\components\\account\\pages\\doctorappointments.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:components\\account\\pages\\doctorappointments.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\components\\account\\pages\\bookappointment.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:components\\account\\pages\\bookappointment.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\components\\account\\pages\\schedule.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:components\\account\\pages\\schedule.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\services\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:services\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\services\\authmessagesenderoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:services\\authmessagesenderoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\components\\account\\identityredirectmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:components\\account\\identityredirectmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\components\\account\\pages\\confirmemail.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:components\\account\\pages\\confirmemail.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|c:\\users\\admin\\epita-2025-health-app-78737\\blazorhealthapp2025\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BE79C852-B395-1957-49D4-F94C7AA8B750}|BlazorHealthApp2025.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 319,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BookAppointment.razor",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\BookAppointment.razor",
+              "RelativeDocumentMoniker": "Components\\Account\\Pages\\BookAppointment.razor",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\BookAppointment.razor",
+              "RelativeToolTip": "Components\\Account\\Pages\\BookAppointment.razor",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAewLEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-07T02:11:45.257Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Data\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Data\\ApplicationUser.cs",
+              "RelativeToolTip": "Data\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T02:10:59.98Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmailSender.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Services\\EmailSender.cs",
+              "RelativeDocumentMoniker": "Services\\EmailSender.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Services\\EmailSender.cs",
+              "RelativeToolTip": "Services\\EmailSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T01:59:14.284Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DoctorAppointments.razor",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\DoctorAppointments.razor",
+              "RelativeDocumentMoniker": "Components\\Account\\Pages\\DoctorAppointments.razor",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\DoctorAppointments.razor",
+              "RelativeToolTip": "Components\\Account\\Pages\\DoctorAppointments.razor",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAuwIwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-07T03:41:59.068Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Schedule.razor",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\Schedule.razor",
+              "RelativeDocumentMoniker": "Components\\Account\\Pages\\Schedule.razor",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\Schedule.razor",
+              "RelativeToolTip": "Components\\Account\\Pages\\Schedule.razor",
+              "ViewState": "AgIAAJUBAAAAAAAAAAAqwKQBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-07T03:57:32.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Services\\AdminService.cs",
+              "RelativeDocumentMoniker": "Services\\AdminService.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Services\\AdminService.cs",
+              "RelativeToolTip": "Services\\AdminService.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAA+wDwAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T03:51:50.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Components\\App.razor",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\App.razor",
+              "RelativeToolTip": "Components\\App.razor",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-07T03:00:44.948Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IdentityRedirectManager.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\IdentityRedirectManager.cs",
+              "RelativeDocumentMoniker": "Components\\Account\\IdentityRedirectManager.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\IdentityRedirectManager.cs",
+              "RelativeToolTip": "Components\\Account\\IdentityRedirectManager.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T02:45:53.62Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAADgvyUAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T02:01:10.104Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthMessageSenderOptions.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Services\\AuthMessageSenderOptions.cs",
+              "RelativeDocumentMoniker": "Services\\AuthMessageSenderOptions.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Services\\AuthMessageSenderOptions.cs",
+              "RelativeToolTip": "Services\\AuthMessageSenderOptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T01:59:12.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-07T02:11:02.717Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ConfirmEmail.razor",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\ConfirmEmail.razor",
+              "RelativeDocumentMoniker": "Components\\Account\\Pages\\ConfirmEmail.razor",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\Components\\Account\\Pages\\ConfirmEmail.razor",
+              "RelativeToolTip": "Components\\Account\\Pages\\ConfirmEmail.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-07T02:11:12.533Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\ADMIN\\epita-2025-health-app-78737\\BlazorHealthApp2025\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-07T01:59:45.802Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
