@@ -873,4 +873,3 @@ C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\BlazorHealthApp2025.pdb
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\BlazorHealthApp2025.genruntimeconfig.cache
 C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\ref\BlazorHealthApp2025.dll
-C:\Users\ADMIN\epita-2025-health-app-78737\BlazorHealthApp2025\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

@@ -118,8 +118,8 @@ else
     private async Task ConfirmAppointment(Appointment appt)
     {
         var appUser = await UserManager.FindByIdAsync(appt.PatientId);
-        await EmailSender.Execute("Appointement Confirmation", $"Hello {appUser.FirstName},\nyou have a confirmation on your appointement with {appUser.TempDoctorName} on the {appt.AppointmentDate} for {appt.Description}.\nIboren Health", appUser.Email);
         var docUser = await UserManager.FindByIdAsync(appt.DoctorId);
+        await EmailSender.Execute("Appointement Confirmation", $"Hello {appUser.FirstName},\nyou have a confirmation on your appointement with {docUser.FirstName} {docUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\nIboren Health", appUser.Email);
         await EmailSender.Execute("Appointement Notice", $"Hello {docUser.FirstName},\nyou have an appointement with {appUser.FirstName}{appUser.LastName} on the {appt.AppointmentDate} for {appt.Description}.\nIboren Health", docUser.Email);
 
         appt.IsConfirmed = true;
@@ -140,7 +140,7 @@ else
         TimeSpan difference = appt.AppointmentDate - currentDateTime;
         if (difference.TotalHours <= 24)
         {
-            await EmailSender.Execute("Appointement Reminder", $"Hello {appUser.FirstName},\nyou have your appointement with {appUser.TempDoctorName} on the {appt.AppointmentDate} for {appt.Description} in less than 24hours!\nIboren Health", appUser.Email);
+            await EmailSender.Execute("Appointement Reminder", $"Hello {appUser.FirstName},\nyou have your appointement with {docUser.FirstName}{docUser.LastName} on the {appt.AppointmentDate} for {appt.Description} in less than 24hours!\nIboren Health", appUser.Email);
         }
 
         DbContext.CalendarEntries.Add(entry);
